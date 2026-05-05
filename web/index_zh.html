@@ -3,18 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Meadow — 公開技術概覽</title>
+<title>Meadow:基於物理基底的三層機器人控制學習堆疊</title>
 <style>
   :root {
-    --bg: #faf8f3;
-    --surface: #ffffff;
-    --ink: #0e0e0e;
-    --ink-2: #2a2a2a;
-    --muted: #666666;
-    --line: #e5e2da;
-    --line-strong: #d0ccc1;
-    --accent: #c4502b;
-    --accent-soft: rgba(196, 80, 43, 0.08);
+    --bg: #ffffff;
+    --ink: #111111;
+    --ink-2: #1f1f1f;
+    --muted: #555555;
+    --line: #d8d8d2;
+    --line-soft: #ececec;
+    --link: #0a4ea3;
+    --code-bg: #f6f5f0;
   }
 
   * { box-sizing: border-box; }
@@ -23,1190 +22,1136 @@
     margin: 0;
     background: var(--bg);
     color: var(--ink);
-    font-family: -apple-system, "SF Pro Text", "Inter", "Helvetica Neue", Arial, sans-serif;
+    font-family: "Songti TC", "Source Han Serif TC", "Noto Serif TC", "STSong", "Iowan Old Style", "Georgia", serif;
     font-size: 17px;
-    line-height: 1.65;
+    line-height: 1.85;
     -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
 
-  a { color: var(--accent); text-decoration: none; }
-  a:hover { text-decoration: underline; }
+  a { color: var(--link); text-decoration: none; border-bottom: 1px solid rgba(10, 78, 163, 0.25); }
+  a:hover { border-bottom-color: var(--link); }
 
-  .container {
-    max-width: 760px;
+  .page {
+    max-width: 880px;
     margin: 0 auto;
-    padding: 0 28px;
+    padding: 80px 32px 120px;
   }
-  .container.wide {
-    max-width: 1080px;
-  }
+  .page.wide { max-width: 1040px; }
+  .table-wrap.full { margin-left: -80px; margin-right: -80px; }
 
-  /* Top bar */
-  .topbar {
-    border-bottom: 1px solid var(--line);
-    padding: 22px 0;
-  }
-  .topbar-inner {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 14px;
-  }
-  .topbar .brand {
-    font-weight: 700;
-    letter-spacing: -0.01em;
-    color: var(--ink);
-  }
-  .topbar .meta {
-    color: var(--muted);
-  }
-
-  /* Hero */
-  .hero {
-    padding: 120px 0 100px;
+  /* Title block */
+  .title-block {
+    margin-bottom: 56px;
+    padding-bottom: 32px;
     border-bottom: 1px solid var(--line);
   }
-  .hero .label {
-    font-size: 13px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 28px;
+  h1.title {
+    font-size: 30px;
     font-weight: 600;
-  }
-  .hero h1 {
-    font-family: "Songti TC", "Source Han Serif TC", "Noto Serif TC", "Charter", "Iowan Old Style", "Georgia", serif;
-    font-size: clamp(44px, 6.4vw, 76px);
-    font-weight: 500;
-    line-height: 1.06;
-    letter-spacing: -0.02em;
-    margin: 0 0 28px;
+    line-height: 1.3;
+    margin: 0 0 8px;
+    letter-spacing: 0.005em;
     color: var(--ink);
   }
-  .hero .lede {
-    font-size: 21px;
-    line-height: 1.5;
-    color: var(--ink-2);
-    margin: 0 0 20px;
-    max-width: 640px;
-  }
-  .hero .sub {
+  .title-en {
+    font-family: "Iowan Old Style", "Charter", "Georgia", serif;
     font-size: 17px;
     color: var(--muted);
-    margin: 0;
-    max-width: 640px;
-  }
-
-  /* Section */
-  section {
-    padding: 96px 0;
-    border-bottom: 1px solid var(--line);
-  }
-  section:last-of-type {
-    border-bottom: 0;
-  }
-
-  .eyebrow {
-    font-size: 13px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--accent);
-    font-weight: 600;
-    margin-bottom: 18px;
-  }
-
-  h2 {
-    font-family: "Songti TC", "Source Han Serif TC", "Noto Serif TC", "Charter", "Iowan Old Style", "Georgia", serif;
-    font-size: clamp(30px, 3.6vw, 42px);
+    font-style: italic;
+    margin: 0 0 22px;
+    line-height: 1.4;
     font-weight: 500;
-    line-height: 1.15;
-    letter-spacing: -0.015em;
-    margin: 0 0 32px;
-    color: var(--ink);
+  }
+  .authors {
+    font-size: 17px;
+    color: var(--ink-2);
+    margin: 0 0 6px;
+  }
+  .affiliation {
+    font-size: 14px;
+    color: var(--muted);
+    margin: 0 0 14px;
+  }
+  .meta-line {
+    font-size: 13px;
+    color: var(--muted);
+    font-family: "SF Mono", "Menlo", "Monaco", monospace;
+    margin: 0;
   }
 
-  h3 {
-    font-size: 19px;
+  /* Abstract */
+  .abstract {
+    margin: 0 0 36px;
+    padding: 24px 28px;
+    background: #fafaf6;
+    border-left: 3px solid var(--ink);
+    font-size: 16px;
+    line-height: 1.85;
+  }
+  .abstract .label {
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 12px;
+    font-family: "SF Mono", "Menlo", monospace;
+  }
+  .abstract p { margin: 0; color: var(--ink-2); }
+
+  /* Preface */
+  .preface {
+    margin: 0 0 56px;
+    padding: 0 4px;
+    font-size: 16.5px;
+    line-height: 1.95;
+    color: var(--ink-2);
+  }
+  .preface .label {
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 16px;
+    font-family: "SF Mono", "Menlo", monospace;
+  }
+  .preface p { margin: 0 0 16px; }
+  .preface p:last-child { margin-bottom: 0; }
+  .preface em { font-style: normal; font-weight: 600; color: var(--ink); }
+
+  /* Sections */
+  section {
+    margin-bottom: 56px;
+  }
+
+  h2.section {
+    font-size: 22px;
     font-weight: 600;
-    line-height: 1.35;
-    margin: 0 0 8px;
-    color: var(--ink);
+    margin: 0 0 18px;
+    line-height: 1.4;
+    letter-spacing: 0.005em;
+  }
+  h2.section .num {
+    color: var(--muted);
+    font-weight: 500;
+    margin-right: 12px;
+    font-variant-numeric: tabular-nums;
+    font-family: "Iowan Old Style", serif;
   }
 
-  p { margin: 0 0 18px; color: var(--ink-2); }
+  h3.subsection {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 30px 0 12px;
+    line-height: 1.45;
+  }
+  h3.subsection .num {
+    color: var(--muted);
+    font-weight: 500;
+    margin-right: 10px;
+    font-variant-numeric: tabular-nums;
+    font-family: "Iowan Old Style", serif;
+  }
+
+  p { margin: 0 0 16px; color: var(--ink-2); }
   p:last-child { margin-bottom: 0; }
 
-  ul.plain, ol.plain {
-    margin: 0 0 18px;
-    padding-left: 22px;
+  ul, ol {
+    margin: 0 0 16px;
+    padding-left: 24px;
   }
-  ul.plain li, ol.plain li {
-    color: var(--ink-2);
+  ul li, ol li {
     margin-bottom: 8px;
+    color: var(--ink-2);
+  }
+
+  em { font-style: normal; }
+  strong { font-weight: 600; color: var(--ink); }
+
+  code, .mono {
+    font-family: "SF Mono", "Menlo", "Monaco", monospace;
+    font-size: 0.88em;
+    background: var(--code-bg);
+    padding: 1px 6px;
+    border-radius: 3px;
+    color: var(--ink);
+  }
+
+  /* Figure */
+  .figure {
+    margin: 32px 0;
+  }
+  .figure-body {
+    background: #fafaf6;
+    border: 1px solid var(--line-soft);
+    padding: 28px 24px;
+    border-radius: 4px;
+  }
+  .figure-cap {
+    font-size: 14px;
+    color: var(--muted);
+    margin-top: 12px;
+    line-height: 1.7;
+  }
+  .figure-cap b {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  /* Architecture diagram */
+  .arch-diagram {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .arch-block {
+    background: #ffffff;
+    border: 1px solid var(--line);
+    padding: 16px 14px;
+    text-align: center;
+    border-radius: 3px;
+  }
+  .arch-block .b-tag {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-family: "SF Mono", monospace;
+    margin-bottom: 8px;
+  }
+  .arch-block .b-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .arch-block .b-note {
+    font-size: 12px;
+    color: var(--muted);
     line-height: 1.6;
   }
 
-  /* Stat row in hero / inline */
-  .stats {
+  /* Calibration loop */
+  .loop-diagram {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 32px;
-    margin-top: 56px;
-    padding-top: 32px;
-    border-top: 1px solid var(--line);
+    gap: 10px;
+    text-align: center;
   }
-  .stat strong {
-    display: block;
-    font-family: "Songti TC", "Source Han Serif TC", "Charter", "Georgia", serif;
-    font-size: 32px;
-    font-weight: 500;
-    color: var(--ink);
-    line-height: 1;
-    margin-bottom: 8px;
-    letter-spacing: -0.01em;
-  }
-  .stat span {
-    display: block;
-    font-size: 13px;
-    color: var(--muted);
-    line-height: 1.4;
-  }
-
-  /* Numbered points */
-  .points {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    counter-reset: pt;
-  }
-  .points > li {
-    counter-increment: pt;
-    padding: 28px 0;
-    border-top: 1px solid var(--line);
-    display: grid;
-    grid-template-columns: 60px 1fr;
-    gap: 24px;
-    align-items: baseline;
-  }
-  .points > li:first-child { border-top: 0; padding-top: 0; }
-  .points > li::before {
-    content: counter(pt, decimal-leading-zero);
-    font-family: "Songti TC", "Source Han Serif TC", "Charter", "Georgia", serif;
-    font-size: 22px;
-    color: var(--accent);
-    font-weight: 500;
-  }
-  .points h3 { margin-bottom: 6px; }
-  .points p { color: var(--muted); margin: 0; }
-
-  /* Layer block (3-layer architecture) */
-  .layers {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 0;
-    margin-top: 8px;
-  }
-  .layer {
-    padding: 24px 0;
-    border-top: 1px solid var(--line);
-    display: grid;
-    grid-template-columns: 160px 1fr;
-    gap: 28px;
-    align-items: baseline;
-  }
-  .layer:first-child { border-top: 0; padding-top: 0; }
-  .layer .layer-tag {
-    font-size: 13px;
-    color: var(--accent);
-    font-weight: 600;
-    letter-spacing: 0.02em;
-    text-transform: uppercase;
-  }
-  .layer .layer-body h3 { margin-bottom: 6px; }
-  .layer .layer-body p { color: var(--muted); margin: 0; }
-
-  /* Pull quote */
-  .pull {
-    border-left: 2px solid var(--accent);
-    padding-left: 22px;
-    margin: 32px 0 0;
-    font-family: "Songti TC", "Source Han Serif TC", "Charter", "Georgia", serif;
-    font-size: 20px;
-    line-height: 1.5;
-    color: var(--ink);
-    font-style: italic;
-  }
-
-  /* Video grid */
-  .videos {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-    margin-top: 8px;
-  }
-  .video {
-    background: var(--surface);
+  .loop-step {
+    background: #ffffff;
     border: 1px solid var(--line);
-    overflow: hidden;
-    border-radius: 4px;
-  }
-  .video img, .video video {
-    width: 100%;
-    aspect-ratio: 16 / 10;
-    display: block;
-    object-fit: cover;
-    background: #efece5;
-  }
-  .video .v-cap {
-    padding: 14px 16px 16px;
-    border-top: 1px solid var(--line);
-  }
-  .video .v-cap strong {
-    display: block;
-    font-size: 14px;
-    font-weight: 600;
+    padding: 14px 10px;
+    border-radius: 3px;
+    font-size: 13px;
     color: var(--ink);
+    line-height: 1.6;
+  }
+  .loop-step .step-n {
+    display: block;
+    font-family: "SF Mono", monospace;
+    font-size: 11px;
+    color: var(--muted);
     margin-bottom: 4px;
   }
-  .video .v-cap span {
-    display: block;
-    font-size: 13px;
-    color: var(--muted);
-    line-height: 1.45;
+  .loop-step .step-name {
+    font-weight: 600;
+    margin-bottom: 4px;
   }
 
-  /* Verified table */
+  /* Tables */
   .table-wrap {
-    margin-top: 8px;
-    border: 1px solid var(--line);
-    border-radius: 4px;
-    overflow: hidden;
-    background: var(--surface);
+    margin: 18px 0 8px;
+    overflow-x: auto;
   }
   table {
     width: 100%;
     border-collapse: collapse;
+    font-size: 14px;
+    font-family: "PingFang TC", "Heiti TC", "Songti TC", -apple-system, sans-serif;
+  }
+  table caption {
+    caption-side: bottom;
+    text-align: left;
+    font-size: 14px;
+    color: var(--muted);
+    padding-top: 10px;
+    line-height: 1.7;
+    font-family: "Songti TC", "Source Han Serif TC", serif;
+  }
+  table caption b {
+    color: var(--ink);
+    font-weight: 600;
   }
   th, td {
-    padding: 14px 18px;
+    padding: 9px 9px;
     text-align: left;
-    font-size: 14px;
-    border-bottom: 1px solid var(--line);
+    border-bottom: 1px solid var(--line-soft);
     vertical-align: top;
   }
-  th {
+  thead th {
+    border-top: 1.5px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
     font-weight: 600;
     font-size: 12px;
-    letter-spacing: 0.04em;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  tbody tr:last-child td {
+    border-bottom: 1.5px solid var(--ink);
+  }
+  td.num, th.num {
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+    white-space: nowrap;
+  }
+  td.nowrap, th.nowrap { white-space: nowrap; }
+
+  /* Video grid */
+  .videos-supp {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+  .task-section {
+    margin-bottom: 26px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .task-section:last-child { border-bottom: 0; padding-bottom: 0; margin-bottom: 0; }
+  .task-section h4 {
+    margin: 0 0 6px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink);
+    font-family: "Songti TC", serif;
+  }
+  .row-label {
+    font-size: 11px;
+    color: var(--muted);
+    font-family: "SF Mono", monospace;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin: 12px 0 6px;
+  }
+  .videos-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  .placeholder {
+    background: rgba(0,0,0,0.025);
+    border: 1px dashed var(--line);
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: #888;
+    font-style: italic;
+    text-align: center;
+    padding: 14px 8px;
+    aspect-ratio: 4 / 3;
+    line-height: 1.5;
+  }
+  .vfig {
+    background: #fafaf6;
+    border: 1px solid var(--line-soft);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .vfig img, .vfig video {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    display: block;
+    object-fit: cover;
+    background: #ebe9e0;
+  }
+  .vfig .vcap {
+    padding: 10px 12px;
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--ink-2);
+    font-family: "PingFang TC", "Heiti TC", -apple-system, sans-serif;
+  }
+  .vfig .vcap b {
+    display: block;
+    color: var(--ink);
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+
+  /* References */
+  .refs {
+    margin-top: 12px;
+  }
+  .ref {
+    font-size: 14.5px;
+    color: var(--ink-2);
+    padding: 10px 0;
+    border-top: 1px solid var(--line-soft);
+    line-height: 1.7;
+  }
+  .ref:first-child { border-top: 0; padding-top: 0; }
+  .ref .ref-id {
+    display: inline-block;
+    color: var(--muted);
+    font-family: "SF Mono", monospace;
+    font-size: 12px;
+    margin-right: 8px;
+    min-width: 32px;
+  }
+
+  /* Aside / footnote */
+  .aside {
+    font-size: 14.5px;
+    color: var(--muted);
+    border-left: 2px solid var(--line);
+    padding-left: 16px;
+    margin: 18px 0;
+    line-height: 1.8;
+  }
+
+  /* TOC */
+  .toc {
+    background: #fafaf6;
+    border: 1px solid var(--line-soft);
+    padding: 18px 22px;
+    margin-bottom: 48px;
+    border-radius: 3px;
+  }
+  .toc-label {
+    font-size: 11px;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--muted);
-    background: rgba(0,0,0,0.015);
+    font-weight: 700;
+    margin-bottom: 10px;
+    font-family: "SF Mono", monospace;
   }
-  tr:last-child td { border-bottom: 0; }
-  td strong { color: var(--ink); font-weight: 600; }
-  .ok {
-    display: inline-block;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--accent);
-    background: var(--accent-soft);
-    padding: 2px 8px;
-    border-radius: 999px;
-    letter-spacing: 0.02em;
-  }
-
-  /* QA list */
-  .qa-list {
-    margin-top: 8px;
-  }
-  .qa-item {
-    padding: 32px 0;
-    border-top: 1px solid var(--line);
-  }
-  .qa-item:first-child { border-top: 0; padding-top: 0; }
-  .qa-item .qid {
-    font-size: 13px;
-    color: var(--accent);
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    margin-bottom: 8px;
-  }
-  .qa-item h3 {
-    font-family: "Songti TC", "Source Han Serif TC", "Charter", "Georgia", serif;
-    font-size: 22px;
-    font-weight: 500;
-    line-height: 1.3;
-    margin-bottom: 16px;
-    color: var(--ink);
-  }
-  .qa-item p { color: var(--ink-2); }
-  .qa-item ul.plain li strong { color: var(--ink); }
-
-  /* Roadmap */
-  .timeline {
-    margin-top: 8px;
-  }
-  .tl-row {
-    display: grid;
-    grid-template-columns: 140px 1fr;
-    gap: 28px;
-    padding: 22px 0;
-    border-top: 1px solid var(--line);
-    align-items: baseline;
-  }
-  .tl-row:first-child { border-top: 0; padding-top: 0; }
-  .tl-row .when {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--accent);
-    letter-spacing: 0.02em;
-  }
-  .tl-row .what { color: var(--ink-2); font-size: 16px; line-height: 1.55; }
-
-  /* Ask */
-  .ask-list {
-    margin-top: 8px;
-  }
-  .ask-item {
-    padding: 24px 0;
-    border-top: 1px solid var(--line);
-    display: grid;
-    grid-template-columns: 200px 1fr;
-    gap: 28px;
-    align-items: baseline;
-  }
-  .ask-item:first-child { border-top: 0; padding-top: 0; }
-  .ask-item h3 {
-    font-family: "Songti TC", "Source Han Serif TC", "Charter", "Georgia", serif;
-    font-size: 20px;
-    font-weight: 500;
+  .toc ol {
     margin: 0;
+    padding-left: 28px;
   }
-  .ask-item p { color: var(--muted); margin: 0; font-size: 16px; }
+  .toc li {
+    margin-bottom: 4px;
+    font-size: 14.5px;
+  }
+  .toc a { border-bottom: none; color: var(--ink-2); }
+  .toc a:hover { color: var(--link); }
 
-  /* Footer */
-  footer {
-    border-top: 1px solid var(--line);
-    padding: 40px 0 60px;
-    text-align: left;
-  }
-  footer .row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 12px;
-    font-size: 13px;
-    color: var(--muted);
-  }
-
-  @media (max-width: 760px) {
-    .stats { grid-template-columns: repeat(2, 1fr); gap: 24px; }
-    .videos { grid-template-columns: 1fr; }
-    .layer { grid-template-columns: 1fr; gap: 8px; }
-    .points > li { grid-template-columns: 1fr; gap: 8px; }
-    .points > li::before { font-size: 18px; }
-    .tl-row { grid-template-columns: 1fr; gap: 6px; }
-    .ask-item { grid-template-columns: 1fr; gap: 10px; }
-    .hero { padding: 80px 0 64px; }
-    section { padding: 72px 0; }
+  @media (max-width: 720px) {
+    .page { padding: 56px 22px 80px; }
+    h1.title { font-size: 25px; }
+    .arch-diagram, .loop-diagram { grid-template-columns: 1fr; }
+    .videos-supp { grid-template-columns: 1fr; }
   }
 </style>
 </head>
 <body>
 
-<div class="topbar">
-  <div class="container">
-    <div class="topbar-inner">
-      <span class="brand">Meadow</span>
-      <span class="meta">公開技術概覽 · 2026 · 黃聖凱 · <a href="index.html" style="color: var(--muted); border-bottom: 1px dotted var(--muted);">EN</a></span>
-    </div>
+<div class="page">
+
+  <div class="title-block">
+    <h1 class="title">Meadow:基於物理基底的三層機器人控制學習堆疊</h1>
+    <p class="title-en">Meadow: A Physics-Grounded Three-Layer Learning Stack for Robot Control</p>
+    <p class="authors">黃聖凱 (Sheng-Kai Huang)</p>
+    <p class="affiliation">獨立研究者,台北 · <a href="mailto:akai@fawstudio.com">akai@fawstudio.com</a></p>
+    <p class="meta-line">技術報告 · v0.0.2 · 2026 年 4 月</p>
   </div>
+
+  <div class="abstract">
+    <div class="label">摘要 · Abstract</div>
+    <p>本文提出 <em>Meadow</em>,一個以物理狀態(而非感知觀察)為歸納偏置基底的機器人控制學習堆疊。Meadow 將控制問題拆解為三個明確分離的層:(i)物理層,在模擬器動力學下展開候選軌跡的因果樹;(ii)神經評分網路,在所得分支上學習成功似然;(iii)神經反應策略,將被選中的因果鏈蒸餾為可部署的低延遲控制器。具名變數校正迴圈封閉了整個系統:當部署行為偏離預測的因果鏈時,規格中具名的物理參數會被重新估計,受影響的層在本地重新蒸餾——無需完整重訓,也不需要重新收集示範資料。我們在四個代表性任務(TwoRoom、PushT、Reacher、OGBench Cube)上回報端到端結果:單任務評分網路驗證準確率最高達 0.9990;PushT 上達到次像素級反應精度(最終 block 誤差 0.81 px);同一條 pipeline 通過 OGBench v1 四個 family 的 API check,每個 family 僅使用 443–2,724 條軌跡樣本。Apple Silicon 上 Core ML 反應推論為 0.095–0.122 ms。</p>
+  </div>
+
+  <div class="preface">
+    <div class="label">Preface · 序 — 起源</div>
+    <p>從最愛的物理學走進這個世界。大學哥本哈根詮釋徹底改變我看待世界方式——波粒二重性、測不準原理、機率波、機率波崩解。多年後,AMI Labs 提出的框架——<em>「intelligence does not begin in language but in the world」</em>——對我有著同樣的衝擊。</p>
+
+    <p>在我看來,這是同一個信念,被講述在不同的領域:一個有智慧的 agent 與它所行動的世界並不可分,而智能的結構反映了物理互動的結構。我深深被這個視野吸引,Meadow 在某種程度上,是我自己嘗試把這個信念認真做出來的回應。</p>
+
+    <p>Meadow 嘗試從物理狀態那一側起步。這個選擇也受到發展神經科學一個觀察的影響:試著思考嬰兒似乎對世界的第一次接觸是透過前庭、皮膚觸覺、聲音與呼吸空氣來感知這個世界,隨後當他們產生視覺能力,再透過一次次的物體互動的感知過程理解這個世界。Meadow 在第一層把這些物理通道當作第一級的觀察量,透過對物理的互動開始在世界做任何他可做的事情;同時也能了解他的輸出與輸入間的因果,透過因果關係的強弱,一次次形成多條鏈開始探索與完成任務。第二層將這些相關的因果鏈過程與最強的因果鏈組成訓練資料,希望可以了解並且產生能理解抽象視界的能力。第三層訓練的模型會和第一層的因果鏈保持聯繫,在有差距的時候即時進行修正——目標希望和 <em>A Path Towards Autonomous Machine Intelligence</em> [<a href="#r1">1</a>] 中所主張的精神是一致的。</p>
+
+    <p>我以致敬先行者的態度提出這份報告。如果有引用錯誤或是理解錯誤,希望可以獲得指導與修正。</p>
+  </div>
+
+  <div class="toc">
+    <div class="toc-label">Contents · 目次</div>
+    <ol>
+      <li><a href="#intro">引言 (Introduction)</a></li>
+      <li><a href="#arch">架構 (Architecture)</a></li>
+      <li><a href="#calib">校正迴圈 (Calibration Loop)</a></li>
+      <li><a href="#exp">實驗 (Experiments)</a></li>
+      <li><a href="#disc">討論與相關工作 (Discussion and Related Work)</a></li>
+      <li><a href="#refs">參考文獻 (References)</a></li>
+    </ol>
+  </div>
+
+  <section id="intro">
+    <h2 class="section"><span class="num">1.</span>引言</h2>
+    <p>當代機器人學習的主流範式,把感知視為主要基底:一個高容量的神經網路接收像素觀察、輸出動作,讓梯度下降在大資料集上負責還原物理結構 [<a href="#r1">1</a>]。這條路線已經產出許多令人印象深刻的結果,但它把兩個本質不同的學習問題——感知表徵的學習與控制的學習——耦合進同一個最佳化過程,並繼承了「從單眼像素序列推論物理量(質量、摩擦、接觸)」這個本身就 ill-posed 的困難。</p>
+
+    <p>另一個起點來自發展神經科學的一般共識:前庭、本體感覺與觸覺訊號在子宮中即已發育,出生時功能上已大致成熟;而視覺皮層需要出生後數個月才能達到成人水準。換言之,一個生物 agent 對自身所處物理世界形成的最初模型,是建立在物理而非感知的基本量之上。</p>
+
+    <p>我們把這個觀察當作一個設計原則來認真對待。Meadow 把物理狀態接受為第一級的可觀察量:設備參數、接觸力、關節位置、目標門檻,以宣告式 spec 中具型別的變數形式進入系統,而不是必須從影像中還原的量。系統接著在這個狀態上、在物理 backend 之下進行因果展開,以神經評分網路學習對分支的價值,並把所選因果鏈蒸餾為一個小型的反應策略。我們將證明這樣的拆解同時帶來三個性質:(i)每一層都有具名且可被檢視的歸納偏置;(ii)在小規模訓練語料下仍能高效學習;(iii)當部署時行為發生漂移,系統能定位到具體的物理參數變化、並在本地重新蒸餾。</p>
+
+    <p><b>本文貢獻。</b></p>
+    <ul>
+      <li>一個將物理展開、價值學習、策略蒸餾三層獨立、可檢視的架構(§<a href="#arch">2</a>)。</li>
+      <li>一個將漂移偵測與校正定義在 spec 物理變數上的具名校正迴圈,相對於不透明的「concept drift」偵測有實質的可解釋性差異(§<a href="#calib">3</a>)。</li>
+      <li>四個任務 family 上的端到端實驗結果,所有 artifact 可重現(§<a href="#exp">4</a>),包含接觸操作的次像素級反應精度,以及同一條 pipeline 通過 OGBench v1 四個 family 的結果。</li>
+    </ul>
+  </section>
+
+  <section id="arch">
+    <h2 class="section"><span class="num">2.</span>架構</h2>
+    <p>Meadow 把機器人控制拆成三個層,每一層都有明確的角色,以及明確存在(或明確不存在)的學習器。系統的輸入是三個具型別的規格:<code>DeviceSpec</code> 宣告致動器、關節與物理約束;<code>SceneSpec</code> 宣告物件與接觸幾何;<code>GoalSpec</code> 宣告任務門檻與安全邊界。</p>
+
+    <div class="figure">
+      <div class="figure-body">
+        <svg viewBox="0 0 720 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">
+          <defs>
+            <marker id="ah1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#111"/></marker>
+            <marker id="ah1c" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#c4502b"/></marker>
+          </defs>
+          <rect x="220" y="14" width="280" height="46" fill="#fff" stroke="#111" rx="3"/>
+          <text x="360" y="33" text-anchor="middle" font-family="Songti TC, Iowan Old Style, serif" font-size="12" font-weight="600">DeviceSpec · SceneSpec · GoalSpec</text>
+          <text x="360" y="50" text-anchor="middle" font-family="Songti TC, serif" font-size="10" fill="#555">具型別的物理變數</text>
+          <line x1="360" y1="60" x2="360" y2="94" stroke="#111" marker-end="url(#ah1)"/>
+          <rect x="40" y="102" width="200" height="74" fill="#fafaf6" stroke="#111" rx="3"/>
+          <text x="140" y="124" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#555">LAYER 1</text>
+          <text x="140" y="144" text-anchor="middle" font-family="Songti TC, serif" font-size="13" font-weight="600">物理展開</text>
+          <text x="140" y="161" text-anchor="middle" font-family="Songti TC, serif" font-size="10" fill="#555">不學習 · 模擬器驅動因果樹</text>
+          <rect x="260" y="102" width="200" height="74" fill="#fafaf6" stroke="#111" rx="3"/>
+          <text x="360" y="124" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#555">LAYER 2</text>
+          <text x="360" y="144" text-anchor="middle" font-family="Songti TC, serif" font-size="13" font-weight="600">神經評分</text>
+          <text x="360" y="161" text-anchor="middle" font-family="Songti TC, serif" font-size="10" fill="#555">學習各分支的成功似然</text>
+          <rect x="480" y="102" width="200" height="74" fill="#fafaf6" stroke="#111" rx="3"/>
+          <text x="580" y="124" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#555">LAYER 3</text>
+          <text x="580" y="144" text-anchor="middle" font-family="Songti TC, serif" font-size="13" font-weight="600">反應策略蒸餾</text>
+          <text x="580" y="161" text-anchor="middle" font-family="Songti TC, serif" font-size="10" fill="#555">可部署的低延遲控制器</text>
+          <line x1="240" y1="139" x2="260" y2="139" stroke="#111" marker-end="url(#ah1)"/>
+          <line x1="460" y1="139" x2="480" y2="139" stroke="#111" marker-end="url(#ah1)"/>
+          <line x1="580" y1="176" x2="580" y2="206" stroke="#111" marker-end="url(#ah1)"/>
+          <text x="580" y="225" text-anchor="middle" font-family="Songti TC, serif" font-size="11" fill="#555">action (Core ML / ONNX / MLX)</text>
+          <path d="M 580 235 Q 580 262 360 262 L 140 262 Q 140 232 140 206" fill="none" stroke="#c4502b" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#ah1c)"/>
+          <text x="360" y="256" text-anchor="middle" font-family="Songti TC, serif" font-size="10" fill="#c4502b">具名變數校正迴圈</text>
+        </svg>
+      </div>
+      <div class="figure-cap"><b>Figure 1.</b> Meadow 三層堆疊。物理展開不含學習;兩個神經層所收到的訓練分布,本身已被物理約束過濾——所形成的抽象因此自動尊重守恆與可行性,不需額外的輔助 loss。橘色虛線為部署後的具名變數校正回授路徑。</div>
+    </div>
+
+    <h3 class="subsection"><span class="num">2.1</span>物理展開 (Layer 1)</h3>
+    <p>給定一個 spec 與初始狀態,模擬器在物理動力學下推進候選未來。當分支違反 spec 中編碼的物理約束(關節限制、碰撞、控制飽和)或 <code>GoalSpec</code> 中的任務約束時即被剪除。最終得到的樹,其節點是物理上可達的狀態,其邊是允許的轉移。我們把成功鏈、近 miss 與被剪除的失敗分支全部以結構化記錄保留下來。</p>
+
+    <h3 class="subsection"><span class="num">2.2</span>神經評分 (Layer 2)</h3>
+    <p>一個神經網路被訓練去把(狀態、候選延伸)對應到一個連續的成功分數。關鍵在於:訓練分布就是 Layer 1 的物理過濾樹——正例是成功鏈,負例是被剪除或近 miss 的分支。不需要額外的 hard-negative mining,評分網路所學到的表徵也自動繼承來自基底的物理一致性。</p>
+
+    <h3 class="subsection"><span class="num">2.3</span>反應策略 (Layer 3)</h3>
+    <p>反應策略是一個小型神經網路,從評分網路所選出的因果鏈中蒸餾而來。視任務結構而定,我們使用 behavior-cloning 變體或 k-nearest-neighbor exemplar 變體(細節見 §<a href="#exp">4</a>)。策略運作於 spec 中宣告的同一個物理狀態空間,因此它的輸入與輸出在語義上仍是可檢視的。</p>
+
+    <p class="aside">值得注意的是,spec 層對觀察來源是不可知的(observation-source agnostic)。在沒有模擬器狀態的場景中,spec 框架可以由一個學習出來的編碼器(視覺、觸覺、多模態)來填充,Layer 1–3 不變。我們在 §<a href="#disc">5.2</a> 進一步討論這個整合點。</p>
+  </section>
+
+  <section id="calib">
+    <h2 class="section"><span class="num">3.</span>校正迴圈</h2>
+    <p>spec 驅動設計的一個核心性質是:對學習有意義的變數都有<em>名字</em>——摩擦係數、負載質量、阻尼比、感測器偏移。當部署中的反應策略產生的軌跡偏離預測的因果鏈時,這個偏離可以被歸因到具體的物理參數,而不是不透明的「概念漂移」。</p>
+
+    <div class="figure">
+      <div class="figure-body" style="padding: 20px;">
+        <svg viewBox="0 0 480 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:520px;height:auto;display:block;margin:0 auto;">
+          <defs>
+            <marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#c4502b"/></marker>
+          </defs>
+          <circle cx="240" cy="170" r="58" fill="#fff" stroke="#111" stroke-width="1.5"/>
+          <text x="240" y="164" text-anchor="middle" font-family="Songti TC, serif" font-size="14" font-weight="600">Spec</text>
+          <text x="240" y="183" text-anchor="middle" font-family="Songti TC, serif" font-size="11" fill="#555">具名物理變數</text>
+          <rect x="170" y="22" width="140" height="56" fill="#fafaf6" stroke="#111" rx="3"/>
+          <text x="240" y="40" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#555">STEP 1</text>
+          <text x="240" y="58" text-anchor="middle" font-family="Songti TC, serif" font-size="13" font-weight="600">偵測</text>
+          <text x="240" y="73" text-anchor="middle" font-family="Songti TC, serif" font-size="10" fill="#555">軌跡偏離門檻</text>
+          <rect x="338" y="142" width="140" height="56" fill="#fafaf6" stroke="#111" rx="3"/>
+          <text x="408" y="160" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#555">STEP 2</text>
+          <text x="408" y="178" text-anchor="middle" font-family="Songti TC, serif" font-size="13" font-weight="600">辨識</text>
+          <text x="408" y="193" text-anchor="middle" font-family="Songti TC, serif" font-size="10" fill="#555">重新估計變數</text>
+          <rect x="170" y="262" width="140" height="56" fill="#fafaf6" stroke="#111" rx="3"/>
+          <text x="240" y="280" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#555">STEP 3</text>
+          <text x="240" y="298" text-anchor="middle" font-family="Songti TC, serif" font-size="13" font-weight="600">重展開</text>
+          <text x="240" y="313" text-anchor="middle" font-family="Songti TC, serif" font-size="10" fill="#555">因果樹刷新</text>
+          <rect x="2" y="142" width="140" height="56" fill="#fafaf6" stroke="#111" rx="3"/>
+          <text x="72" y="160" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#555">STEP 4</text>
+          <text x="72" y="178" text-anchor="middle" font-family="Songti TC, serif" font-size="13" font-weight="600">重蒸餾</text>
+          <text x="72" y="193" text-anchor="middle" font-family="Songti TC, serif" font-size="10" fill="#555">策略更新部署</text>
+          <path d="M 305 76 Q 380 88 395 142" fill="none" stroke="#c4502b" stroke-width="1.6" marker-end="url(#ah2)"/>
+          <path d="M 395 198 Q 380 252 305 264" fill="none" stroke="#c4502b" stroke-width="1.6" marker-end="url(#ah2)"/>
+          <path d="M 175 264 Q 100 252 85 198" fill="none" stroke="#c4502b" stroke-width="1.6" marker-end="url(#ah2)"/>
+          <path d="M 85 142 Q 100 88 175 76" fill="none" stroke="#c4502b" stroke-width="1.6" marker-end="url(#ah2)"/>
+        </svg>
+      </div>
+      <div class="figure-cap"><b>Figure 2.</b> 校正迴圈。漂移在「軌跡」的層次被觀察到、在「參數」的層次經由具名變數的系統辨識被歸因、在「策略」的層次經由本地重新蒸餾被修正。中央的 spec 是所有具名物理變數的單一來源,先前版本的策略保留以便回滾。</div>
+    </div>
+
+    <p>這與端到端學習的控制器形成對照:後者面對漂移時,只能(i)重新收集在新條件下的示範資料,或(ii)重新訓練一個內部表徵無法檢視的不透明策略——失敗的維度從來沒有名字。</p>
+  </section>
+
+  <section id="exp">
+    <h2 class="section"><span class="num">4.</span>實驗</h2>
+
+    <h3 class="subsection"><span class="num">4.1</span>展示任務</h3>
+    <p>我們在四個跨越導航、接觸操作、手臂控制、抓放的任務上實例化 Meadow 堆疊。Table <a href="#t1">1</a> 回報每個任務的評分與反應表現;Figure <a href="#f3">3</a> 顯示代表性的 rollout。所有數字皆來自本機 artifact,沒有任何外推到公開 benchmark 的宣稱。</p>
+
+    <div class="table-wrap">
+      <table id="t1">
+        <thead>
+          <tr>
+            <th>任務</th>
+            <th>因果 / 評分</th>
+            <th>Success Rate</th>
+            <th>精度</th>
+            <th class="num">訓練樣本</th>
+            <th>設備</th>
+            <th class="num">Iter</th>
+            <th class="num">Wall-clock</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>TwoRoom</strong>(2D 導航)</td>
+            <td>val_acc 0.9990 (79/80)</td>
+            <td>80/80 (100%)</td>
+            <td>二元終點</td>
+            <td class="num">49,920</td>
+            <td class="nowrap">M1 Max · MLX</td>
+            <td class="num">1,799</td>
+            <td class="num">~48 s</td>
+          </tr>
+          <tr>
+            <td><strong>PushT</strong>(接觸)</td>
+            <td>4/4 pose-aware guard</td>
+            <td>2/2 (100%)</td>
+            <td>final 0.81 px</td>
+            <td class="num">1,010 / 315</td>
+            <td class="nowrap">M1 Max · MLX</td>
+            <td class="num">— (oracle)</td>
+            <td class="num">~56 s¹ / ~112 s²</td>
+          </tr>
+          <tr>
+            <td><strong>Reacher</strong>(手臂)</td>
+            <td>4/4;median 0.00369</td>
+            <td>2/2 (100%)</td>
+            <td>mean final dist 0.00494</td>
+            <td class="num">288 / 144</td>
+            <td class="nowrap">M1 Max · MLX</td>
+            <td class="num">— (oracle)</td>
+            <td class="num">~分鐘級³</td>
+          </tr>
+          <tr>
+            <td><strong>OGBench Cube</strong></td>
+            <td>val_acc 0.9963 (60/60)</td>
+            <td>4/4 (100%)</td>
+            <td>phase-conditioned</td>
+            <td class="num">35,200</td>
+            <td class="nowrap">M1 Max · MLX</td>
+            <td class="num">1,399</td>
+            <td class="num">~25 s</td>
+          </tr>
+        </tbody>
+        <caption><b>Table 1.</b> 四個代表性任務的端到端結果。「因果 / 評分」欄回報因果樹選擇成功與(在適用情形下)評分網路的驗證準確率。「Success Rate」欄回報蒸餾後反應策略在 heldout 上的成功率。「精度」欄回報 task-specific 的細粒度 metric。「訓練樣本」評分側為單一數字;反應側以 <em>train / val</em> 表示。「Iter」是評分網路的訓練步數;PushT 與 Reacher 使用 oracle true-env causal-tree planner 而非神經評分,故無 iter。「Wall-clock」是 Apple M1 Max 上實測壁鐘時間,從本機 codex session timestamp 與 checkpoint mtime 反推;¹ PushT oracle 4-episode recording、² PushT 反應策略 distillation(student v10)、³ Reacher recording 在另一個 session 跑,精確壁鐘待補。詳細 convergence 見 Figure 5。</caption>
+      </table>
+    </div>
+
+    <div class="figure" id="f3">
+      <div class="figure-body" style="padding: 22px 18px;">
+
+        <div class="task-section">
+          <h4>TwoRoom · 2D 導航</h4>
+          <div class="row-label">因果鏈 · neural scorer rollout(4 個真實場景,來自 val_acc 0.9990 的訓練 ckpt)</div>
+          <div class="videos-row">
+            <div class="vfig"><img src="tworoom_neural_causal_scorer/videos_v2/neural_base.gif" alt="base"><div class="vcap"><b>base</b>標準位置</div></div>
+            <div class="vfig"><img src="tworoom_neural_causal_scorer/videos_v2/neural_high_narrow.gif" alt="high_narrow"><div class="vcap"><b>high_narrow</b>高位窄門</div></div>
+            <div class="vfig"><img src="tworoom_neural_causal_scorer/videos_v2/neural_low_medium.gif" alt="low_medium"><div class="vcap"><b>low_medium</b>低位中等</div></div>
+            <div class="vfig"><img src="tworoom_neural_causal_scorer/videos_v2/neural_wide_shifted.gif" alt="wide_shifted"><div class="vcap"><b>wide_shifted</b>寬廣偏移</div></div>
+          </div>
+          <div class="row-label">反應策略 · BC student(4 個成功場景)</div>
+          <div class="videos-row">
+            <div class="vfig"><img src="tworoom_causal_student/videos/student_base.gif" alt="base"><div class="vcap"><b>base</b>標準位置</div></div>
+            <div class="vfig"><img src="tworoom_causal_student/videos/student_high_narrow.gif" alt="high_narrow"><div class="vcap"><b>high_narrow</b>高位窄門</div></div>
+            <div class="vfig"><img src="tworoom_causal_student/videos/student_low_goal.gif" alt="low_goal"><div class="vcap"><b>low_goal</b>低位目標</div></div>
+            <div class="vfig"><img src="tworoom_causal_student/videos/student_wide.gif" alt="wide"><div class="vcap"><b>wide</b>寬廣場景</div></div>
+          </div>
+        </div>
+
+        <div class="task-section">
+          <h4>PushT · 接觸操作</h4>
+          <div class="row-label">因果樹 · true-env causal tree(4 個成功場景)</div>
+          <div class="videos-row">
+            <div class="vfig"><img src="pusht_true_env_causal_tree_pose_lowalpha/videos/pusht_causal_tree_base.gif" alt="base"><div class="vcap"><b>base</b>標準推進</div></div>
+            <div class="vfig"><img src="pusht_true_env_causal_tree_pose_lowalpha/videos/pusht_causal_tree_long_push.gif" alt="long_push"><div class="vcap"><b>long_push</b>長距推進</div></div>
+            <div class="vfig"><img src="pusht_true_env_causal_tree_pose_lowalpha/videos/pusht_causal_tree_offset.gif" alt="offset"><div class="vcap"><b>offset</b>偏移起點</div></div>
+            <div class="vfig"><img src="pusht_true_env_causal_tree_pose_lowalpha/videos/pusht_causal_tree_rotation.gif" alt="rotation"><div class="vcap"><b>rotation</b>旋轉對齊</div></div>
+          </div>
+          <div class="row-label">反應策略 · kNN exemplar Reaction v10(4 個成功 rollouts)</div>
+          <div class="videos-row">
+            <div class="vfig"><img src="pusht_causal_student_v10_release_hold_knn7_smoke/videos/pusht_v10_knn_student_ep4.gif" alt="ep4"><div class="vcap"><b>episode 4</b>final 0.81 px</div></div>
+            <div class="vfig"><img src="pusht_causal_student_v10_release_hold_knn7_smoke/videos/pusht_v10_knn_student_ep17.gif" alt="ep17"><div class="vcap"><b>episode 17</b>final 2.32 px</div></div>
+            <div class="vfig"><img src="pusht_causal_student_v10_release_hold_knn7_smoke/videos_extra/pusht_v10_knn_student_ep0.gif" alt="ep0"><div class="vcap"><b>episode 0</b>final 1.43 px</div></div>
+            <div class="vfig"><img src="pusht_causal_student_v10_release_hold_knn7_smoke/videos_extra2/pusht_v10_knn_student_ep18.gif" alt="ep18"><div class="vcap"><b>episode 18</b>final 1.53 px</div></div>
+          </div>
+        </div>
+
+        <div class="task-section">
+          <h4>Reacher · 手臂控制</h4>
+          <div class="row-label">因果樹 · true-env causal tree(4 個成功場景)</div>
+          <div class="videos-row">
+            <div class="vfig"><img src="reacher_true_env_causal_tree/videos/reacher_causal_tree_base.gif" alt="base"><div class="vcap"><b>base</b>seed 0,final 0.0031</div></div>
+            <div class="vfig"><img src="reacher_true_env_causal_tree/videos/reacher_causal_tree_offset.gif" alt="offset"><div class="vcap"><b>offset</b>seed 1,final 0.0036</div></div>
+            <div class="vfig"><img src="reacher_true_env_causal_tree/videos/reacher_causal_tree_wide.gif" alt="wide"><div class="vcap"><b>wide</b>seed 4,final 0.0040</div></div>
+            <div class="vfig"><img src="reacher_true_env_causal_tree/videos/reacher_causal_tree_hard.gif" alt="hard"><div class="vcap"><b>hard</b>seed 7,final 0.0038</div></div>
+          </div>
+          <div class="row-label">反應策略 · Reaction v2(4 個成功 rollouts)</div>
+          <div class="videos-row">
+            <div class="vfig"><img src="reacher_causal_student_v2_smoke/videos/reacher_reaction_v2_val_seed4.gif" alt="val_seed4"><div class="vcap"><b>val seed 4</b>final 0.0060</div></div>
+            <div class="vfig"><img src="reacher_causal_student_v2_smoke/videos/reacher_reaction_v2_val_seed5.gif" alt="val_seed5"><div class="vcap"><b>val seed 5</b>final 0.0039</div></div>
+            <div class="vfig"><img src="reacher_causal_student_v2_smoke/videos/reacher_reaction_v2_train_seed0.gif" alt="train_seed0"><div class="vcap"><b>train seed 0</b>final 0.0066</div></div>
+            <div class="vfig"><img src="reacher_causal_student_v2_smoke/videos/reacher_reaction_v2_train_seed1.gif" alt="train_seed1"><div class="vcap"><b>train seed 1</b>final 0.0064</div></div>
+          </div>
+        </div>
+
+        <div class="task-section">
+          <h4>OGBench Cube · 抓取放置</h4>
+          <div class="row-label">因果鏈 · neural causal scorer rollout(4 個成功場景)</div>
+          <div class="videos-row">
+            <div class="vfig"><img src="ogbench_cube_grasp_neural_causal_scorer/videos/ogcube_base.gif" alt="base"><div class="vcap"><b>base</b>標準起始</div></div>
+            <div class="vfig"><img src="ogbench_cube_grasp_neural_causal_scorer/videos/ogcube_hard_start.gif" alt="hard_start"><div class="vcap"><b>hard_start</b>困難起點</div></div>
+            <div class="vfig"><img src="ogbench_cube_grasp_neural_causal_scorer/videos/ogcube_high_goal.gif" alt="high_goal"><div class="vcap"><b>high_goal</b>高位目標</div></div>
+            <div class="vfig"><img src="ogbench_cube_grasp_neural_causal_scorer/videos/ogcube_side_goal.gif" alt="side_goal"><div class="vcap"><b>side_goal</b>側位目標</div></div>
+          </div>
+          <div class="row-label">反應策略 · Reaction v2(4 個成功 rollouts)</div>
+          <div class="videos-row">
+            <div class="vfig"><img src="ogbench_cube_causal_student_v2_smoke/videos/ogcube_reaction_v2_base.gif" alt="base"><div class="vcap"><b>base</b>final 0.0130</div></div>
+            <div class="vfig"><img src="ogbench_cube_causal_student_v2_smoke/videos/ogcube_reaction_v2_high_goal.gif" alt="high_goal"><div class="vcap"><b>high_goal</b>final 0.0037</div></div>
+            <div class="vfig"><img src="ogbench_cube_causal_student_v2_smoke/videos/ogcube_reaction_v2_side_goal.gif" alt="side_goal"><div class="vcap"><b>side_goal</b>final 0.0031</div></div>
+            <div class="vfig"><img src="ogbench_cube_causal_student_v2_smoke/videos/ogcube_reaction_v2_hard_start.gif" alt="hard_start"><div class="vcap"><b>hard_start</b>final 0.0042</div></div>
+          </div>
+        </div>
+
+      </div>
+      <div class="figure-cap"><b>Figure 3.</b> 四個任務的成功 rollouts,分別展示因果鏈(true-env causal tree teacher)與反應策略(distilled student)在不同起始位置 / 目標位置上的成功完成。所有影片直接從本機 artifact 讀取; PushT、Reacher 與 OGBench Cube 的 Reaction rollout 已在本機補錄並接入本頁。</div>
+    </div>
+
+    <div class="figure">
+      <div class="figure-body" style="padding: 24px 16px;">
+        <svg viewBox="0 0 720 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">
+          <line x1="70" y1="40" x2="70" y2="260" stroke="#111" stroke-width="1"/>
+          <line x1="70" y1="260" x2="690" y2="260" stroke="#111" stroke-width="1"/>
+          <line x1="70" y1="216" x2="690" y2="216" stroke="#eee"/>
+          <text x="62" y="220" text-anchor="end" font-family="SF Mono, monospace" font-size="10" fill="#555">0.2</text>
+          <line x1="70" y1="172" x2="690" y2="172" stroke="#eee"/>
+          <text x="62" y="176" text-anchor="end" font-family="SF Mono, monospace" font-size="10" fill="#555">0.4</text>
+          <line x1="70" y1="128" x2="690" y2="128" stroke="#eee"/>
+          <text x="62" y="132" text-anchor="end" font-family="SF Mono, monospace" font-size="10" fill="#555">0.6</text>
+          <line x1="70" y1="84" x2="690" y2="84" stroke="#eee"/>
+          <text x="62" y="88" text-anchor="end" font-family="SF Mono, monospace" font-size="10" fill="#555">0.8</text>
+          <line x1="70" y1="40" x2="690" y2="40" stroke="#eee"/>
+          <text x="62" y="44" text-anchor="end" font-family="SF Mono, monospace" font-size="10" fill="#555">1.0</text>
+          <text x="62" y="263" text-anchor="end" font-family="SF Mono, monospace" font-size="10" fill="#555">0.0</text>
+          <text x="70" y="276" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#555">0</text>
+          <text x="208" y="276" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#555">400</text>
+          <text x="346" y="276" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#555">800</text>
+          <text x="483" y="276" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#555">1200</text>
+          <text x="621" y="276" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#555">1600</text>
+          <text x="380" y="298" text-anchor="middle" font-family="Songti TC, serif" font-size="11" fill="#555">scorer iteration</text>
+          <text x="22" y="150" text-anchor="middle" font-family="Songti TC, serif" font-size="11" fill="#555" transform="rotate(-90 22 150)">metric value (0–1)</text>
+          <polyline points="70,60 139,45 208,42 277,42 345,42 414,41 483,40 552,41 621,41 689,40" fill="none" stroke="#111" stroke-width="2"/>
+          <polyline points="70,73 139,59 208,40 277,40 345,40 414,40 483,40 552,40 621,40 689,43" fill="none" stroke="#111" stroke-width="1.5" stroke-dasharray="5,3"/>
+          <polyline points="70,128 139,53 208,41 277,42 345,41 414,41 483,42 552,41" fill="none" stroke="#c4502b" stroke-width="2"/>
+          <polyline points="70,245 139,44 208,40 277,40 345,40 414,40 483,40 552,40" fill="none" stroke="#c4502b" stroke-width="1.5" stroke-dasharray="5,3"/>
+          <g fill="#111">
+            <circle cx="70" cy="60" r="2.5"/><circle cx="139" cy="45" r="2.5"/><circle cx="208" cy="42" r="2.5"/>
+            <circle cx="277" cy="42" r="2.5"/><circle cx="345" cy="42" r="2.5"/><circle cx="414" cy="41" r="2.5"/>
+            <circle cx="483" cy="40" r="2.5"/><circle cx="552" cy="41" r="2.5"/><circle cx="621" cy="41" r="2.5"/>
+            <circle cx="689" cy="40" r="2.5"/>
+          </g>
+          <g fill="#c4502b">
+            <circle cx="70" cy="128" r="2.5"/><circle cx="139" cy="53" r="2.5"/><circle cx="208" cy="41" r="2.5"/>
+            <circle cx="277" cy="42" r="2.5"/><circle cx="345" cy="41" r="2.5"/><circle cx="414" cy="41" r="2.5"/>
+            <circle cx="483" cy="42" r="2.5"/><circle cx="552" cy="41" r="2.5"/>
+          </g>
+          <rect x="488" y="50" width="195" height="78" fill="#fff" stroke="#ddd" stroke-width="0.5" opacity="0.96"/>
+          <line x1="498" y1="62" x2="523" y2="62" stroke="#111" stroke-width="2"/>
+          <text x="528" y="66" font-family="Songti TC, serif" font-size="10" fill="#111">TwoRoom val_acc</text>
+          <line x1="498" y1="78" x2="523" y2="78" stroke="#111" stroke-width="1.5" stroke-dasharray="5,3"/>
+          <text x="528" y="82" font-family="Songti TC, serif" font-size="10" fill="#111">TwoRoom selected_succ</text>
+          <line x1="498" y1="94" x2="523" y2="94" stroke="#c4502b" stroke-width="2"/>
+          <text x="528" y="98" font-family="Songti TC, serif" font-size="10" fill="#c4502b">Cube val_acc</text>
+          <line x1="498" y1="110" x2="523" y2="110" stroke="#c4502b" stroke-width="1.5" stroke-dasharray="5,3"/>
+          <text x="528" y="114" font-family="Songti TC, serif" font-size="10" fill="#c4502b">Cube selected_succ</text>
+        </svg>
+      </div>
+      <div class="figure-cap"><b>Figure 5.</b> 神經評分網路在 TwoRoom 與 OGBench Cube 上的訓練收斂曲線,資料來自本機 <code>metrics.json</code>。實線為 val_acc;虛線為 selected_success_rate。Cube 的 selected success rate 從 iter 0 的 6.7% 在 200 iter 內躍升至 98.3%——展示「物理過濾的訓練資料 + 緊緻 scorer」的 sample efficiency。最終 val_acc:TwoRoom 0.9990(iter 1799)、Cube 0.9963(iter 1399)。</div>
+    </div>
+
+    <div class="figure" style="margin-top: 32px;">
+      <div class="figure-body" style="padding: 24px 16px;">
+        <svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">
+          <!-- Y axis -->
+          <line x1="80" y1="40" x2="80" y2="280" stroke="#111" stroke-width="1"/>
+          <!-- X axis -->
+          <line x1="80" y1="280" x2="730" y2="280" stroke="#111" stroke-width="1"/>
+
+          <!-- Y grid -->
+          <line x1="80" y1="40" x2="730" y2="40" stroke="#eee"/>
+          <text x="72" y="44" text-anchor="end" font-family="SF Mono, monospace" font-size="10" fill="#555">1.0</text>
+          <line x1="80" y1="100" x2="730" y2="100" stroke="#eee"/>
+          <text x="72" y="104" text-anchor="end" font-family="SF Mono, monospace" font-size="10" fill="#555">0.75</text>
+          <line x1="80" y1="160" x2="730" y2="160" stroke="#eee"/>
+          <text x="72" y="164" text-anchor="end" font-family="SF Mono, monospace" font-size="10" fill="#555">0.50</text>
+          <line x1="80" y1="220" x2="730" y2="220" stroke="#eee"/>
+          <text x="72" y="224" text-anchor="end" font-family="SF Mono, monospace" font-size="10" fill="#555">0.25</text>
+          <text x="72" y="283" text-anchor="end" font-family="SF Mono, monospace" font-size="10" fill="#555">0.0</text>
+
+          <!-- X log ticks -->
+          <text x="80" y="296" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#555">1s</text>
+          <text x="188" y="296" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#555">10s</text>
+          <text x="273" y="296" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#555">1m</text>
+          <text x="369" y="296" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#555">10m</text>
+          <text x="465" y="296" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#555">1h</text>
+          <text x="615" y="296" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#555">1d</text>
+          <text x="706" y="296" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#555">1w</text>
+
+          <!-- Vertical milestone lines -->
+          <line x1="273" y1="40" x2="273" y2="280" stroke="#ddd" stroke-dasharray="2,3"/>
+          <line x1="465" y1="40" x2="465" y2="280" stroke="#ddd" stroke-dasharray="2,3"/>
+          <line x1="615" y1="40" x2="615" y2="280" stroke="#ddd" stroke-dasharray="2,3"/>
+          <line x1="706" y1="40" x2="706" y2="280" stroke="#ddd" stroke-dasharray="2,3"/>
+
+          <!-- Top axis label -->
+          <text x="405" y="22" text-anchor="middle" font-family="Songti TC, serif" font-size="12" fill="#111" font-weight="600">每個 system 達到 peak success 的訓練 wall-clock</text>
+          <text x="22" y="160" text-anchor="middle" font-family="Songti TC, serif" font-size="11" fill="#555" transform="rotate(-90 22 160)">peak success / val_acc</text>
+          <text x="405" y="320" text-anchor="middle" font-family="Songti TC, serif" font-size="11" fill="#555">training wall-clock (log scale, seconds)</text>
+
+          <!-- Industry baselines (hollow markers, dashed connector to label) -->
+          <!-- Diffusion Policy: 1.5 h, 0.92 -->
+          <circle cx="484" cy="58" r="6" fill="#fff" stroke="#666" stroke-width="1.6"/>
+          <line x1="484" y1="58" x2="484" y2="80" stroke="#999" stroke-dasharray="2,2"/>
+          <text x="484" y="92" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#666">Diffusion Policy</text>
+          <text x="484" y="104" text-anchor="middle" font-family="SF Mono, monospace" font-size="9" fill="#888">~1.5 h, single GPU</text>
+
+          <!-- π0 / VLA: 2 days, 0.88 -->
+          <circle cx="647" cy="69" r="6" fill="#fff" stroke="#666" stroke-width="1.6"/>
+          <line x1="647" y1="69" x2="647" y2="100" stroke="#999" stroke-dasharray="2,2"/>
+          <text x="647" y="112" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#666">π0 / VLA</text>
+          <text x="647" y="124" text-anchor="middle" font-family="SF Mono, monospace" font-size="9" fill="#888">~days, multi-GPU</text>
+
+          <!-- Meadow markers (filled, accent color) -->
+          <!-- Connect Meadow points with subtle line for visual emphasis -->
+          <line x1="232" y1="41" x2="273" y2="40" stroke="#c4502b" stroke-width="2" opacity="0.5"/>
+
+          <!-- Meadow Cube: 25s, 0.996 -->
+          <circle cx="232" cy="41" r="7" fill="#c4502b"/>
+          <line x1="232" y1="41" x2="180" y2="180" stroke="#c4502b" stroke-dasharray="2,2"/>
+          <text x="180" y="194" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#c4502b" font-weight="700">Meadow · Cube scorer</text>
+          <text x="180" y="206" text-anchor="middle" font-family="SF Mono, monospace" font-size="9" fill="#c4502b">25 s on M1 Max</text>
+
+          <!-- Meadow TwoRoom: 60s, 0.999 -->
+          <circle cx="273" cy="40" r="7" fill="#c4502b"/>
+          <line x1="273" y1="40" x2="350" y2="180" stroke="#c4502b" stroke-dasharray="2,2"/>
+          <text x="350" y="194" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#c4502b" font-weight="700">Meadow · TwoRoom scorer</text>
+          <text x="350" y="206" text-anchor="middle" font-family="SF Mono, monospace" font-size="9" fill="#c4502b">60 s on M1 Max</text>
+
+          <!-- Annotation: deployment surface gap -->
+          <path d="M 273 245 L 615 245" stroke="#c4502b" stroke-width="1.5" opacity="0.5"/>
+          <path d="M 273 240 L 273 250" stroke="#c4502b" stroke-width="1.5" opacity="0.5"/>
+          <path d="M 615 240 L 615 250" stroke="#c4502b" stroke-width="1.5" opacity="0.5"/>
+          <text x="444" y="262" text-anchor="middle" font-family="Songti TC, serif" font-size="11" fill="#c4502b" font-style="italic">~1,400× wall-clock,從 1 分鐘到 1 天</text>
+        </svg>
+      </div>
+      <div class="figure-cap"><b>Figure 6.</b> 訓練 wall-clock 對照。橫軸為 log-scale 訓練壁鐘時間;縱軸為各 system 達到的 peak success rate / val_acc。<strong style="color:#c4502b;">實心橘色標記</strong>為 Meadow 在 Apple M1 Max + MLX 上的實測(TwoRoom scorer 60 s · val_acc 0.999;Cube scorer 25 s · val_acc 0.996);<strong style="color:#666;">空心灰色標記</strong>為 Diffusion Policy / π0 等公開 order-of-magnitude 數字。重要 caveat:業界普遍不公開精確 wall-clock(見 Figure 7),空心標記是從各方 hardware footprint 與 dataset 規模反推的合理 estimate,不應視為 head-to-head benchmark。<em>任務 contract 不同(Meadow scope 刻意收窄為 spec-driven 控制,不是 general visuomotor policy)</em>,本圖不主張 ML capability 優劣;它呈現的是「device-side · no-cloud」部署面選擇的量化結果——同樣量級的 success rate,Meadow 在消費級 Apple Silicon 筆電上完成,而對照組需要 single-to-multi GPU。</div>
+    </div>
+
+    <div class="figure" style="margin-top: 32px;">
+      <div class="figure-body" style="padding: 24px 16px;">
+        <svg viewBox="0 0 760 330" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">
+          <!-- Top axis label -->
+          <text x="380" y="22" text-anchor="middle" font-family="Songti TC, serif" font-size="12" fill="#111" font-weight="600">公開 training metric 透明度矩陣(2026-04-28 實測 fetch)</text>
+
+          <!-- Column headers -->
+          <text x="220" y="62" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" font-weight="700" fill="#111">Wall-clock</text>
+          <text x="320" y="62" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" font-weight="700" fill="#111">GPU 規格</text>
+          <text x="420" y="62" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" font-weight="700" fill="#111">Sample 數</text>
+          <text x="520" y="62" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" font-weight="700" fill="#111">Success rate</text>
+          <text x="620" y="62" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" font-weight="700" fill="#111">推論延遲</text>
+
+          <!-- Header underline -->
+          <line x1="170" y1="72" x2="670" y2="72" stroke="#111" stroke-width="0.8"/>
+
+          <!-- Row 1: Meadow v0.0.2 -->
+          <text x="160" y="106" text-anchor="end" font-family="Songti TC, serif" font-size="13" font-weight="700" fill="#c4502b">Meadow v0.0.2</text>
+          <text x="160" y="120" text-anchor="end" font-family="SF Mono, monospace" font-size="9" fill="#888">(this work)</text>
+          <rect x="175" y="86" width="90" height="40" fill="#c4502b" stroke="#c4502b"/>
+          <text x="220" y="111" text-anchor="middle" font-family="Songti TC, serif" font-size="14" font-weight="700" fill="#fff">✓</text>
+          <rect x="275" y="86" width="90" height="40" fill="#c4502b" stroke="#c4502b"/>
+          <text x="320" y="111" text-anchor="middle" font-family="Songti TC, serif" font-size="14" font-weight="700" fill="#fff">✓</text>
+          <rect x="375" y="86" width="90" height="40" fill="#c4502b" stroke="#c4502b"/>
+          <text x="420" y="111" text-anchor="middle" font-family="Songti TC, serif" font-size="14" font-weight="700" fill="#fff">✓</text>
+          <rect x="475" y="86" width="90" height="40" fill="#c4502b" stroke="#c4502b"/>
+          <text x="520" y="111" text-anchor="middle" font-family="Songti TC, serif" font-size="14" font-weight="700" fill="#fff">✓</text>
+          <rect x="575" y="86" width="90" height="40" fill="#c4502b" stroke="#c4502b"/>
+          <text x="620" y="111" text-anchor="middle" font-family="Songti TC, serif" font-size="14" font-weight="700" fill="#fff">✓</text>
+
+          <!-- Row 2: Diffusion Policy -->
+          <text x="160" y="156" text-anchor="end" font-family="Songti TC, serif" font-size="13" fill="#444">Diffusion Policy</text>
+          <text x="160" y="170" text-anchor="end" font-family="SF Mono, monospace" font-size="9" fill="#888">Columbia / Toyota</text>
+          <rect x="175" y="136" width="90" height="40" fill="#ffffff" stroke="#ccc" stroke-dasharray="3,2"/>
+          <text x="220" y="161" text-anchor="middle" font-family="Songti TC, serif" font-size="14" fill="#bbb">—</text>
+          <rect x="275" y="136" width="90" height="40" fill="#ffffff" stroke="#ccc" stroke-dasharray="3,2"/>
+          <text x="320" y="161" text-anchor="middle" font-family="Songti TC, serif" font-size="14" fill="#bbb">—</text>
+          <rect x="375" y="136" width="90" height="40" fill="#ffffff" stroke="#ccc" stroke-dasharray="3,2"/>
+          <text x="420" y="161" text-anchor="middle" font-family="Songti TC, serif" font-size="14" fill="#bbb">—</text>
+          <rect x="475" y="136" width="90" height="40" fill="#fafaf6" stroke="#bbb"/>
+          <text x="520" y="161" text-anchor="middle" font-family="Songti TC, serif" font-size="11" fill="#999" font-style="italic">~ 相對值</text>
+          <rect x="575" y="136" width="90" height="40" fill="#ffffff" stroke="#ccc" stroke-dasharray="3,2"/>
+          <text x="620" y="161" text-anchor="middle" font-family="Songti TC, serif" font-size="14" fill="#bbb">—</text>
+
+          <!-- Row 3: π0 / Physical Intelligence -->
+          <text x="160" y="206" text-anchor="end" font-family="Songti TC, serif" font-size="13" fill="#444">π0 / Physical Intelligence</text>
+          <text x="160" y="220" text-anchor="end" font-family="SF Mono, monospace" font-size="9" fill="#888">pi.website/blog/openpi</text>
+          <rect x="175" y="186" width="90" height="40" fill="#ffffff" stroke="#ccc" stroke-dasharray="3,2"/>
+          <text x="220" y="211" text-anchor="middle" font-family="Songti TC, serif" font-size="14" fill="#bbb">—</text>
+          <rect x="275" y="186" width="90" height="40" fill="#ffffff" stroke="#ccc" stroke-dasharray="3,2"/>
+          <text x="320" y="211" text-anchor="middle" font-family="Songti TC, serif" font-size="14" fill="#bbb">—</text>
+          <rect x="375" y="186" width="90" height="40" fill="#fafaf6" stroke="#bbb"/>
+          <text x="420" y="211" text-anchor="middle" font-family="Songti TC, serif" font-size="11" fill="#999" font-style="italic">~ 模糊</text>
+          <rect x="475" y="186" width="90" height="40" fill="#ffffff" stroke="#ccc" stroke-dasharray="3,2"/>
+          <text x="520" y="211" text-anchor="middle" font-family="Songti TC, serif" font-size="14" fill="#bbb">—</text>
+          <rect x="575" y="186" width="90" height="40" fill="#fafaf6" stroke="#bbb"/>
+          <text x="620" y="211" text-anchor="middle" font-family="Songti TC, serif" font-size="11" fill="#999" font-style="italic">~ 相對值</text>
+
+          <!-- Row 4: Unitree -->
+          <text x="160" y="256" text-anchor="end" font-family="Songti TC, serif" font-size="13" fill="#444">Unitree(humanoid + quad)</text>
+          <text x="160" y="270" text-anchor="end" font-family="SF Mono, monospace" font-size="9" fill="#888">unitreerobotics/unitree_rl_gym</text>
+          <rect x="175" y="236" width="90" height="40" fill="#ffffff" stroke="#ccc" stroke-dasharray="3,2"/>
+          <text x="220" y="261" text-anchor="middle" font-family="Songti TC, serif" font-size="14" fill="#bbb">—</text>
+          <rect x="275" y="236" width="90" height="40" fill="#ffffff" stroke="#ccc" stroke-dasharray="3,2"/>
+          <text x="320" y="261" text-anchor="middle" font-family="Songti TC, serif" font-size="14" fill="#bbb">—</text>
+          <rect x="375" y="236" width="90" height="40" fill="#ffffff" stroke="#ccc" stroke-dasharray="3,2"/>
+          <text x="420" y="261" text-anchor="middle" font-family="Songti TC, serif" font-size="14" fill="#bbb">—</text>
+          <rect x="475" y="236" width="90" height="40" fill="#ffffff" stroke="#ccc" stroke-dasharray="3,2"/>
+          <text x="520" y="261" text-anchor="middle" font-family="Songti TC, serif" font-size="14" fill="#bbb">—</text>
+          <rect x="575" y="236" width="90" height="40" fill="#ffffff" stroke="#ccc" stroke-dasharray="3,2"/>
+          <text x="620" y="261" text-anchor="middle" font-family="Songti TC, serif" font-size="14" fill="#bbb">—</text>
+
+          <!-- Legend -->
+          <rect x="170" y="296" width="14" height="14" fill="#c4502b" stroke="#c4502b"/>
+          <text x="190" y="307" font-family="Songti TC, serif" font-size="11" fill="#444">公開精確數字</text>
+          <rect x="290" y="296" width="14" height="14" fill="#fafaf6" stroke="#bbb"/>
+          <text x="310" y="307" font-family="Songti TC, serif" font-size="11" fill="#444">部分 / 模糊 / 相對值</text>
+          <rect x="450" y="296" width="14" height="14" fill="#ffffff" stroke="#ccc" stroke-dasharray="3,2"/>
+          <text x="470" y="307" font-family="Songti TC, serif" font-size="11" fill="#444">未公開(本研究 fetch 確認)</text>
+        </svg>
+      </div>
+      <div class="figure-cap"><b>Figure 7.</b> Robot learning 領域的 training metric 透明度矩陣。資料來源:本研究 2026-04-28 直接 fetch 各 source 公開頁面實測。Meadow v0.0.2 在 5 個關鍵 metric(wall-clock、GPU 規格、sample 規模、success rate、推論延遲)上**全部公開精確數字**(可在本頁 Figure 5、Table 1、Table 2 各別查證);其他 3 個對照系統的公開度有限——僅有「相對值」(例:π0-FAST "4-5× higher inference cost")或定性描述,**沒有任何一家公開 wall-clock + GPU + sample + success rate + latency 全套**。<em>本圖不指控任何系統「不透明」</em>:business reasons 與 trade secret 是 reasonable 的不公開動機。本圖只是把 Meadow 的 radical reproducibility 選擇明確化——對 academic 引用、independent verification、與 customer due diligence,這個資訊密度差異是實質可用的。</div>
+    </div>
+
+    <h3 class="subsection"><span class="num">4.2</span>OGBench v1 同條 pipeline 通過</h3>
+    <p>為了測試「同一條展開–評分–反應 pipeline 是否能在不同任務 family 上只靠改 spec 就 transfer」,我們在 OGBench v1 [<a href="#r2">2</a>] 四個 family 上跑 API check。結果整理於 Table <a href="#t2">2</a>。同一份程式碼在每個 family 上都得到 8/8,任務樣本數介於 443 到 2,724 之間。</p>
+
+    <div class="table-wrap">
+      <table id="t2">
+        <thead>
+          <tr>
+            <th>Family</th>
+            <th>環境</th>
+            <th>因果</th>
+            <th>反應</th>
+            <th class="num">樣本</th>
+            <th class="num">因果 / 反應 (ms)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Cube</td>
+            <td><code>cube-single-singletask-task1-v0</code></td>
+            <td>8/8</td>
+            <td>8/8</td>
+            <td class="num">894</td>
+            <td class="num">70.96 / 73.55</td>
+          </tr>
+          <tr>
+            <td>PointMaze</td>
+            <td><code>pointmaze-medium-singletask-task1-v0</code></td>
+            <td>8/8</td>
+            <td>8/8</td>
+            <td class="num">2,724</td>
+            <td class="num">21.99 / 22.74</td>
+          </tr>
+          <tr>
+            <td>Scene</td>
+            <td><code>scene-singletask-task1-v0</code></td>
+            <td>8/8</td>
+            <td>8/8</td>
+            <td class="num">903</td>
+            <td class="num">74.61 / 64.17</td>
+          </tr>
+          <tr>
+            <td>Puzzle</td>
+            <td><code>puzzle-3x3-singletask-task1-v0</code></td>
+            <td>8/8</td>
+            <td>8/8</td>
+            <td class="num">443</td>
+            <td class="num">52.34 / 36.42</td>
+          </tr>
+        </tbody>
+        <caption><b>Table 2.</b> OGBench v1 四個 family 的同 pipeline 通過。各列的展開–評分–反應程式碼路徑相同,僅 spec 改變。延遲欄為平均 wall-clock(未編譯 Python;部署的 Core ML 反應為 0.095–0.122 ms)。</caption>
+      </table>
+    </div>
+  </section>
+
+  <section id="disc">
+    <h2 class="section"><span class="num">5.</span>討論與相關工作</h2>
+
+    <h3 class="subsection"><span class="num">5.1</span>與基於像素的世界模型的關係</h3>
+    <p>聯合嵌入預測架構(JEPA)[<a href="#r1">1</a>] 處理的是 Meadow 並未嘗試處理的問題:從原始像素學習一個不會 collapse 的預測 latent 表徵。我們把自己的工作視為從同一座橋的另一邊建造起來。Meadow 的 spec 層接受物理狀態作為輸入;當這樣的狀態不可得時,我們預期可以由 JEPA-class 編碼器或類似的學習編碼器來填充 spec 框架,作為 Layer 1 的上游。在我們看來,兩條路線最自然的讀法,是把它們當作同一個未來堆疊的兩層——一邊是感知,另一邊是基於具名物理的規劃與控制。</p>
+
+    <p>這個拆解也分開了兩個常被混為一談的問題。一個是開放的經驗問題:預測式自監督是否能<em>湧現出</em>物理一致的表徵?另一個是工程問題:在已經有具名物理狀態的前提下,如何規劃與控制?Meadow 對前者不持立場,對後者提供一個明確、可檢視的結構,期望兩個答案最終能在中間相遇。</p>
+
+    <p>有一個選擇值得直接說明,因為它有時被誤解為「回到手工設計 prior」:<em>Meadow 的 spec 是對機器人本體、關節、接觸幾何與目標的明確、具名描述——不是隱性的,但人類所需投入的工作量並不比當今任何機器人學習 pipeline 大。</em>Diffusion Policy 透過在特定機器人上的遙控示範,繼承同樣的物理規格;π0 透過多機器人資料集的組裝繼承它;JEPA 風格的世界模型 [<a href="#r1">1</a>] 透過其訓練環境繼承它;傳統控制則透過任何模擬 pipeline 都必須準備的 URDF 與 MuJoCo / Isaac 模型繼承它。Meadow 的選擇不是引入更多人類撰寫的 prior——而是把「大家本來就需要」的描述,當作第一級、具名、可檢視的輸入,而不是把它埋進資料集收集或模擬器設定中。這樣做的好處正是讓 §<a href="#calib">3</a> 的校正迴圈成為可能:當現實漂移時,具名變數可以被重新估計;隱性變數則不行。</p>
+
+    <h3 class="subsection"><span class="num">5.2</span>多模態 grounding</h3>
+    <p>spec 介面是具型別的,但對觀察來源不可知。本體感覺的關節編碼器、力/扭矩感測器、IMU 串流、觸覺陣列,都可以作為一個具型別的通道進入,Layer 1–3 不變。整合這些模態是一個正在進行中的工程方向;我們把它視為 §<a href="#intro">1</a> 中發展神經科學起點的自然延伸——前庭與本體感覺先於視覺。</p>
+
+    <h3 class="subsection"><span class="num">5.3</span>限制</h3>
+    <ul>
+      <li><b>對模擬器的依賴。</b> Layer 1 目前依賴外部物理模擬器(例如 MuJoCo)。Sim-to-real gap 因此繼承自所選 backend。校正迴圈在某種程度上緩解了這個問題(透過從觀察到的部署行為重新估計 spec 參數),但極端 regime——可變形體、流體接觸、複雜摩擦——仍受制於模擬器的保真度。</li>
+      <li><b>當前版本沒有純像素模式。</b> 把像素編碼器接到 spec 框架是 roadmap 上的方向(§<a href="#disc">5.2</a>),但不在 v0.0.2 中。</li>
+      <li><b>校正迴圈的工程化。</b> 漂移偵測與重估循環在單一工作站上已可運作,但要把它包裝成給非 ML operator 用的 turnkey on-device 服務,工程仍在進行中。</li>
+    </ul>
+
+    <h3 class="subsection"><span class="num">5.4</span>量子啟發的結構對應</h3>
+    <p>本工作的起點源於哥本哈根詮釋的幾個核心概念。在因果樹架構落地的過程中,我們發現其中三個概念在結構上與 Meadow 的設計有自然對應,一個是中等強度的結構類比,並且還有兩個重要結構(分支干涉與糾纏)目前未被實現——後者構成自然的下一步研究方向。</p>
+
+    <div class="table-wrap">
+      <table id="t3">
+        <thead>
+          <tr>
+            <th>哥本哈根詮釋概念</th>
+            <th>Meadow 中的對應</th>
+            <th>對應強度</th>
+            <th>當前未實現之處</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>波粒二重性</td>
+            <td>Think 模式(分支分布) ↔ Reaction 模式(蒸餾後的單一可執行軌跡)</td>
+            <td>強</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td>機率波 (Ψ)</td>
+            <td>整棵因果樹 ≈ 所有可能未來的分布;scorer 分數 ≈ |Ψ|²</td>
+            <td>強</td>
+            <td><b>分支間干涉</b>:目前 branch 互相獨立,沒有疊加項</td>
+          </tr>
+          <tr>
+            <td>機率波崩解</td>
+            <td>scorer 選定 chain ≈ 從 branched possibilities collapse 到 single trajectory(架構圖中即命名為 <code>Collapse</code>)</td>
+            <td>強</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td>測不準原理</td>
+            <td>think-depth ↔ reaction-latency 的共軛 trade-off;spec 解析度 ↔ 計算成本</td>
+            <td>中</td>
+            <td>尚無 quantitative 不等式形式的 bound</td>
+          </tr>
+          <tr>
+            <td>(衍生)糾纏</td>
+            <td>—</td>
+            <td>—</td>
+            <td><b>多 agent 共享 spec 變數</b>時的因果樹耦合,目前未實作</td>
+          </tr>
+        </tbody>
+        <caption><b>Table 3.</b> 哥本哈根詮釋四個概念在 Meadow 因果樹架構中的結構對應。前三項為強對應;測不準為中等結構類比;糾纏列為衍生概念之未實現項。表的右欄同時是路線圖。</caption>
+      </table>
+    </div>
+
+    <div class="figure">
+      <div class="figure-body">
+        <svg viewBox="0 0 720 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">
+          <text x="180" y="22" text-anchor="middle" font-family="Songti TC, serif" font-size="12" font-style="italic" fill="#555">Think 模式 — 分支分布(波)</text>
+          <text x="580" y="22" text-anchor="middle" font-family="Songti TC, serif" font-size="12" font-style="italic" fill="#c4502b">Reaction 模式 — 單一軌跡(粒子)</text>
+          <line x1="60" y1="40" x2="60" y2="240" stroke="#ddd" stroke-dasharray="3,3"/>
+          <text x="60" y="265" text-anchor="middle" font-family="Songti TC, serif" font-size="10" fill="#777">root</text>
+          <line x1="240" y1="40" x2="240" y2="240" stroke="#ddd" stroke-dasharray="3,3"/>
+          <text x="240" y="265" text-anchor="middle" font-family="Songti TC, serif" font-size="10" fill="#777">展開</text>
+          <line x1="420" y1="40" x2="420" y2="240" stroke="#ddd" stroke-dasharray="3,3"/>
+          <text x="420" y="265" text-anchor="middle" font-family="Songti TC, serif" font-size="10" fill="#777">物理 + scorer 剪枝</text>
+          <line x1="540" y1="40" x2="540" y2="240" stroke="#c4502b" stroke-dasharray="3,3" opacity="0.6"/>
+          <text x="540" y="265" text-anchor="middle" font-family="Songti TC, serif" font-size="10" fill="#c4502b" font-weight="600">Collapse</text>
+          <circle cx="60" cy="140" r="6" fill="#111"/>
+          <line x1="66" y1="140" x2="180" y2="80" stroke="#bbb" stroke-width="1"/>
+          <line x1="66" y1="140" x2="180" y2="140" stroke="#c4502b" stroke-width="2.2"/>
+          <line x1="66" y1="140" x2="180" y2="200" stroke="#bbb" stroke-width="1"/>
+          <circle cx="180" cy="80" r="4" fill="#bbb"/>
+          <circle cx="180" cy="140" r="5" fill="#c4502b"/>
+          <circle cx="180" cy="200" r="4" fill="#bbb"/>
+          <line x1="184" y1="80" x2="300" y2="55" stroke="#ddd" stroke-width="0.8"/>
+          <line x1="184" y1="80" x2="300" y2="105" stroke="#ddd" stroke-width="0.8"/>
+          <line x1="184" y1="140" x2="300" y2="115" stroke="#bbb" stroke-width="1"/>
+          <line x1="184" y1="140" x2="300" y2="150" stroke="#c4502b" stroke-width="2.2"/>
+          <line x1="184" y1="140" x2="300" y2="180" stroke="#bbb" stroke-width="1"/>
+          <line x1="184" y1="200" x2="300" y2="195" stroke="#ddd" stroke-width="0.8"/>
+          <line x1="184" y1="200" x2="300" y2="240" stroke="#ddd" stroke-width="0.8"/>
+          <circle cx="300" cy="55" r="3" fill="#ddd"/>
+          <circle cx="300" cy="105" r="3" fill="#ddd"/>
+          <circle cx="300" cy="115" r="3" fill="#bbb"/>
+          <circle cx="300" cy="150" r="4.5" fill="#c4502b"/>
+          <circle cx="300" cy="180" r="3" fill="#bbb"/>
+          <circle cx="300" cy="195" r="3" fill="#ddd"/>
+          <circle cx="300" cy="240" r="3" fill="#ddd"/>
+          <line x1="304" y1="150" x2="420" y2="140" stroke="#ccc" stroke-width="0.8"/>
+          <line x1="304" y1="150" x2="420" y2="160" stroke="#c4502b" stroke-width="2.2"/>
+          <line x1="304" y1="115" x2="420" y2="100" stroke="#ddd" stroke-width="0.7"/>
+          <line x1="304" y1="180" x2="420" y2="190" stroke="#ddd" stroke-width="0.7"/>
+          <circle cx="420" cy="100" r="2.5" fill="#ddd"/>
+          <circle cx="420" cy="140" r="3" fill="#ccc"/>
+          <circle cx="420" cy="160" r="4.5" fill="#c4502b"/>
+          <circle cx="420" cy="190" r="2.5" fill="#ddd"/>
+          <line x1="424" y1="160" x2="540" y2="160" stroke="#c4502b" stroke-width="3"/>
+          <circle cx="540" cy="160" r="6.5" fill="#c4502b"/>
+          <line x1="546" y1="160" x2="660" y2="160" stroke="#c4502b" stroke-width="3" stroke-dasharray="4,2" opacity="0.45"/>
+          <text x="660" y="155" text-anchor="end" font-family="Songti TC, serif" font-size="10" fill="#c4502b" font-style="italic">→ 蒸餾為 reaction</text>
+        </svg>
+      </div>
+      <div class="figure-cap"><b>Figure 4.</b> 因果樹的展開與崩解。灰色分支為被物理約束或 scorer 剪除的候選未來;紅色為 scorer 選定、進入 reaction 蒸餾的單一鏈。同一個系統在 Think 模式下呈現「分支分布」(波),在 Reaction 模式下呈現「單一軌跡」(粒子)——這是 Table 3 中波粒二重性與機率波崩解兩個對應的視覺化形式。</div>
+    </div>
+
+    <p>未實現的三個結構同時指向具體的研究方向:</p>
+    <ul>
+      <li><b>分支干涉 (Branch interference)。</b> 引入 path-integral 啟發的 scorer,讓多條軌跡的「相位」可以互相疊加——這對「兩條看似獨立的策略在某些 state 上會建設性 / 破壞性干涉」的場景有直接價值。</li>
+      <li><b>多 agent 糾纏 (Multi-agent entanglement)。</b> 多個 robot 共享 spec 變數時(共同搬運、協調),他們的因果樹自然「糾纏」,這對應到長期路線圖中的 collective coordination 方向。</li>
+      <li><b>量化共軛 bound。</b> 把 think-depth × reaction-latency 寫成可優化的 trade-off 損失,讓系統能自動在共軛量之間找到最佳分配。</li>
+    </ul>
+  </section>
+
+  <section id="refs">
+    <h2 class="section"><span class="num">6.</span>參考文獻</h2>
+    <div class="refs">
+      <div class="ref" id="r1"><span class="ref-id">[1]</span> Y. LeCun. <em>A Path Towards Autonomous Machine Intelligence</em>. OpenReview, 2022.</div>
+      <div class="ref" id="r2"><span class="ref-id">[2]</span> S. Park, K. Frans, B. Eysenbach, S. Levine. <em>OGBench: Benchmarking Offline Goal-Conditioned RL</em>. arXiv:2410.20092, ICLR 2025.</div>
+    </div>
+  </section>
+
+  <p style="font-size: 13px; color: var(--muted); margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--line); font-family: 'SF Mono', monospace; line-height: 1.7;">
+    程式碼與已持久化 artifact:本機 repository(可依需求釋出)。Demo:<a href="meadow_v002.html">meadow_v002.html</a>。
+    聯絡:<a href="mailto:akai@fawstudio.com">akai@fawstudio.com</a>。
+  </p>
+
 </div>
-
-<section class="hero">
-  <div class="container">
-    <div class="label">公開概覽</div>
-    <h1>透過物理模型,加速 AI 建構物理世界經驗與訓練。</h1>
-    <p class="lede">Meadow 是一套以物理為基底的學習模式。工程師只需輸入機器人的規格描述與目標,系統將在 3 分鐘*<sup style="font-size:11px;color:var(--accent);">[註]</sup> 內產生可部署的反應策略,以及可即時校正的自監督流水線。</p>
-    <p class="sub">當真實世界發生漂移——摩擦、負載、感測器偏移、磨損——具名變數校正迴圈會指出哪一個物理參數發生變化,並在本地重新蒸餾。不需要重新收集示範,也不需要整個策略重訓。</p>
-    <p class="sub" style="font-size: 13px; opacity: 0.7; margin-top: 6px;"><sup style="color:var(--accent);">[註]</sup> 依任務複雜度而定:Cube scorer ~25 秒、TwoRoom scorer ~48 秒、PushT 含反應策略蒸餾 ~168 秒。皆在單一 Apple M1 Max + MLX 上實測。詳見「已驗證數字」表。</p>
-
-    <div class="stats">
-      <div class="stat"><strong>4 / 4</strong><span>四個展示任務端到端跑通</span></div>
-      <div class="stat"><strong>&lt; 60 秒</strong><span>評分網路在 M1 Max + MLX 上的訓練時間,無雲端、無 NVIDIA</span></div>
-      <div class="stat"><strong>0.81 px</strong><span>PushT 最終 block 誤差(次像素級反應精度)</span></div>
-      <div class="stat"><strong>0.095 ms</strong><span>Apple Silicon 上的反應推論延遲(Core ML)</span></div>
-    </div>
-  </div>
-</section>
-
-<section id="problem">
-  <div class="container">
-    <div class="eyebrow">問題</div>
-    <h2>每一個客製化機器人的部署,都要花兩週的工程時間。</h2>
-    <ol class="points">
-      <li>
-        <div>
-          <h3>示範資料的成本</h3>
-          <p>Diffusion Policy 每個任務需要數百筆遙控示範;VLA pipeline 需要數百萬筆。每次更換 fixture 或 SKU 都要從頭收集。每一次改動,都是數週的時間。</p>
-        </div>
-      </li>
-      <li>
-        <div>
-          <h3>人工微調</h3>
-          <p>當摩擦、負載或感測器偏移發生變化,操作員必須打開控制器、肉眼判讀軌跡、手動調整參數。每一次漂移事件,就是數小時的高成本人力。</p>
-        </div>
-      </li>
-      <li>
-        <div>
-          <h3>黑盒漂移</h3>
-          <p>端到端學習的策略無法告訴你「是什麼變了」。診斷只剩下「概念漂移」這個籠統的詞。重新收集示範、重新訓練、重新部署——這個循環永遠無法變便宜。</p>
-        </div>
-      </li>
-    </ol>
-    <div style="background: #fdf6e7; border: 1px solid var(--line); border-radius: 4px; padding: 22px 24px; margin: 24px 0;">
-      <div style="font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); font-weight: 700; margin-bottom: 12px;">兩週時間都花在哪?</div>
-      <p style="font-size: 14px; color: var(--ink-2); margin-bottom: 16px; line-height: 1.65;">客製化機器人部署的兩週工程,業界主流路線(Diffusion Policy / VLA / 傳統 PLC)的典型分配如下。</p>
-      <div class="table-wrap">
-        <table style="font-size: 13px;">
-          <thead>
-            <tr>
-              <th style="width: 16%;">階段</th>
-              <th style="width: 44%;">建構內容</th>
-              <th style="width: 40%;">對應設備 / 工具</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Day 1–3</strong></td>
-              <td>規格定義 + teleoperation 示範資料收集(每任務通常需數百筆 demo)</td>
-              <td>Teleop rig(ALOHA / Mobile ALOHA / Meta Quest 主從手臂)· 真實 robot · 操作員 1–2 人</td>
-            </tr>
-            <tr>
-              <td><strong>Day 3–7</strong></td>
-              <td>資料清洗、標註、模擬器建模、failure case 補錄</td>
-              <td>工程師 workstation · 雲端儲存 · 模擬器(MuJoCo / Isaac Gym)</td>
-            </tr>
-            <tr>
-              <td><strong>Day 7–12</strong></td>
-              <td>Policy 訓練(Diffusion Policy / VLA / RL)、超參數搜尋、回測</td>
-              <td>Cloud GPU(A100 / H100,~$5–$50 per cycle)· ML 工程師 · 訓練 framework(PyTorch / JAX)</td>
-            </tr>
-            <tr>
-              <td><strong>Day 12–14</strong></td>
-              <td>Sim2real 校正、手動調參、integration test、文件交付</td>
-              <td>真實 robot · operator · 控制器(Siemens / Rockwell / 自家 PLC)</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <p style="font-size: 12px; color: var(--muted); margin-top: 14px; line-height: 1.6; font-style: italic;">時程為業界典型範圍——整理自 Diffusion Policy、ALOHA / Mobile ALOHA、Physical Intelligence π0 等公開資料。實際時程依任務複雜度差異從一週到數週不等;若是 VLA 等大型 foundation policy,僅資料收集就可能耗時數週至數月。</p>
-    </div>
-
-    <p class="pull">工業機器人市場大約 $200B。大部分都被這個工程瓶頸卡住。Meadow 直接攻這個瓶頸。</p>
-  </div>
-</section>
-
-<section id="solution">
-  <div class="container">
-    <div class="eyebrow">取徑</div>
-    <h2>為「部署面」而設計,不是為了排行榜。</h2>
-    <p>三項設計承諾——刻意停在「我們做到什麼」(What),而不是「我們怎麼做」(How)。讓這些成果能夠成立的具體架構,我們選擇在正確的脈絡下與適合的對象直接交流,而不是公開發表。</p>
-
-    <ol class="points" style="margin-top: 22px;">
-      <li>
-        <div>
-          <h3>輸入是具型別與具名的</h3>
-          <p>系統接受一份結構化、具名的描述——關於機器人、場景與目標——而不是原始影片串流。好處是:每一個驅動行為的變數都有一個工程師能指認的名字。這是讓接下來兩項承諾得以成立的前提。</p>
-        </div>
-      </li>
-      <li>
-        <div>
-          <h3>可部署的成品又小又快</h3>
-          <p>最終策略大小落在 0.077–2.04 MB,在消費級 Apple Silicon 上每次決策 0.095–0.122 ms。這是不可妥協的限制:如果無法塞進客戶的筆電,並在真實控制迴圈中即時回應,我們就不會稱之為「已部署」。</p>
-        </div>
-      </li>
-      <li>
-        <div>
-          <h3>漂移是具名的,不是黑盒</h3>
-          <p>當部署中的策略開始在真實世界失準,系統會定位出<em>哪一個</em>物理參數偏離了原本的假設——摩擦、負載、感測器偏移、接觸剛度——並只在本地修正這一個量,而不是重訓整個策略。這是大多數既有方法尚未提供的能力,也是客戶能在不送資料上雲端的前提下完成重新校正的關鍵。</p>
-        </div>
-      </li>
-    </ol>
-
-    <p class="pull">這些成果——分鐘以內的訓練、毫秒以內的推論、具名變數校正——可以從本頁的公開 artefact 與影片中直接驗證。讓這些成果得以成立的具體 pipeline,我們選擇先保留;若您希望更深入評估,歡迎直接聯絡。</p>
-  </div>
-</section>
-
-<!-- internal cut: full Solution architecture section removed for the public version
-<section id="solution-internal">
-  <div class="container">
-    <h2>Three layers, one spec, a closed calibration loop.</h2>
-    <p>Each layer has an explicit role and an explicit learner. Inductive bias is named, traceable, and inspectable end to end.</p>
-    <div style="background: #fafaf6; border: 1px solid var(--line); border-radius: 4px; padding: 28px 22px; margin: 28px 0 32px;">
-      <svg viewBox="0 0 720 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">
-        <defs>
-          <marker id="ycah1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#0e0e0e"/></marker>
-          <marker id="ycah1c" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#c4502b"/></marker>
-        </defs>
-        <rect x="220" y="14" width="280" height="46" fill="#ffffff" stroke="#0e0e0e" rx="3"/>
-        <text x="360" y="33" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="12" font-weight="600">DeviceSpec · SceneSpec · GoalSpec</text>
-        <text x="360" y="50" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="10" fill="#666" font-style="italic">typed physical variables (the only customer input)</text>
-        <line x1="360" y1="60" x2="360" y2="94" stroke="#0e0e0e" marker-end="url(#ycah1)"/>
-        <rect x="40" y="102" width="200" height="74" fill="#ffffff" stroke="#0e0e0e" rx="3"/>
-        <text x="140" y="124" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#666">LAYER 1</text>
-        <text x="140" y="144" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="13" font-weight="600">Physics Expansion</text>
-        <text x="140" y="161" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="10" fill="#666" font-style="italic">no learning · simulator</text>
-        <rect x="260" y="102" width="200" height="74" fill="#ffffff" stroke="#0e0e0e" rx="3"/>
-        <text x="360" y="124" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#666">LAYER 2</text>
-        <text x="360" y="144" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="13" font-weight="600">Neural Scorer</text>
-        <text x="360" y="161" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="10" fill="#666" font-style="italic">value over branches</text>
-        <rect x="480" y="102" width="200" height="74" fill="#ffffff" stroke="#0e0e0e" rx="3"/>
-        <text x="580" y="124" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#666">LAYER 3</text>
-        <text x="580" y="144" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="13" font-weight="600">Reaction Distillation</text>
-        <text x="580" y="161" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="10" fill="#666" font-style="italic">deployable · &lt; 2 MB · 0.1 ms</text>
-        <line x1="240" y1="139" x2="260" y2="139" stroke="#0e0e0e" marker-end="url(#ycah1)"/>
-        <line x1="460" y1="139" x2="480" y2="139" stroke="#0e0e0e" marker-end="url(#ycah1)"/>
-        <line x1="580" y1="176" x2="580" y2="206" stroke="#0e0e0e" marker-end="url(#ycah1)"/>
-        <text x="580" y="225" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="11" fill="#666" font-style="italic">action (Core ML / ONNX / MLX)</text>
-        <path d="M 580 235 Q 580 262 360 262 L 140 262 Q 140 232 140 206" fill="none" stroke="#c4502b" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#ycah1c)"/>
-        <text x="360" y="256" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="10" fill="#c4502b" font-style="italic">named-variable calibration loop · runs on customer's laptop</text>
-      </svg>
-      <p style="text-align: center; font-size: 12px; color: var(--muted); margin: 12px 0 0; font-style: italic;">Figure 1. Spec → Physics → Scorer → Reaction. Orange dashed = on-device calibration feedback (no cloud).</p>
-    </div>
-
-    <div class="layers">
-      <div class="layer">
-        <div class="layer-tag">Layer 1 · Physics</div>
-        <div class="layer-body">
-          <h3>Causal expansion</h3>
-          <p>The simulator advances candidate futures under real physical dynamics. Mass, friction, contact, constraint. No learning here — this layer provides the truthful trajectories that downstream learners consume.</p>
-        </div>
-      </div>
-      <div class="layer">
-        <div class="layer-tag">Layer 2 · Scorer</div>
-        <div class="layer-body">
-          <h3>Neural value learning</h3>
-          <p>A neural scorer learns success likelihood from the branched trajectories. Training distribution is already filtered by physics, so the abstraction respects conservation and feasibility automatically.</p>
-        </div>
-      </div>
-      <div class="layer">
-        <div class="layer-tag">Layer 3 · Reaction</div>
-        <div class="layer-body">
-          <h3>Neural policy distillation</h3>
-          <p>A compact reaction network distills the selected causal chain into a low-latency action policy. Ships to Core ML, ONNX, Torch, or MLX. Benchmarked across CPU / GPU / ANE on Apple Silicon — for our compact policies (&lt; 2 MB), CPU+GPU is the deployment sweet spot at 0.095–0.122 ms per inference.</p>
-        </div>
-      </div>
-    </div>
-
-    <p class="pull">When a deployed robot drifts, the named-variable calibration loop identifies <em>which</em> physical parameter moved — not opaque concept drift — and re-distills the affected policy locally.</p>
-
-    <div style="background: #fafaf6; border: 1px solid var(--line); border-radius: 4px; padding: 24px 18px; margin: 28px 0 0;">
-      <svg viewBox="0 0 480 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:520px;height:auto;display:block;margin:0 auto;">
-        <defs>
-          <marker id="ycah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#c4502b"/></marker>
-        </defs>
-        <circle cx="240" cy="170" r="58" fill="#ffffff" stroke="#0e0e0e" stroke-width="1.5"/>
-        <text x="240" y="164" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="14" font-weight="600">Spec</text>
-        <text x="240" y="183" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="11" fill="#666" font-style="italic">named variables</text>
-        <rect x="170" y="22" width="140" height="56" fill="#ffffff" stroke="#0e0e0e" rx="3"/>
-        <text x="240" y="40" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#666">STEP 1</text>
-        <text x="240" y="58" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="13" font-weight="600">Detect</text>
-        <text x="240" y="73" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="10" fill="#666">trajectory drift</text>
-        <rect x="338" y="142" width="140" height="56" fill="#ffffff" stroke="#0e0e0e" rx="3"/>
-        <text x="408" y="160" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#666">STEP 2</text>
-        <text x="408" y="178" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="13" font-weight="600">Identify</text>
-        <text x="408" y="193" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="10" fill="#666">re-estimate variable</text>
-        <rect x="170" y="262" width="140" height="56" fill="#ffffff" stroke="#0e0e0e" rx="3"/>
-        <text x="240" y="280" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#666">STEP 3</text>
-        <text x="240" y="298" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="13" font-weight="600">Re-expand</text>
-        <text x="240" y="313" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="10" fill="#666">causal tree refresh</text>
-        <rect x="2" y="142" width="140" height="56" fill="#ffffff" stroke="#0e0e0e" rx="3"/>
-        <text x="72" y="160" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#666">STEP 4</text>
-        <text x="72" y="178" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="13" font-weight="600">Re-distill</text>
-        <text x="72" y="193" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="10" fill="#666" font-style="italic">policy update</text>
-        <path d="M 305 76 Q 380 88 395 142" fill="none" stroke="#c4502b" stroke-width="1.6" marker-end="url(#ycah2)"/>
-        <path d="M 395 198 Q 380 252 305 264" fill="none" stroke="#c4502b" stroke-width="1.6" marker-end="url(#ycah2)"/>
-        <path d="M 175 264 Q 100 252 85 198" fill="none" stroke="#c4502b" stroke-width="1.6" marker-end="url(#ycah2)"/>
-        <path d="M 85 142 Q 100 88 175 76" fill="none" stroke="#c4502b" stroke-width="1.6" marker-end="url(#ycah2)"/>
-      </svg>
-      <p style="text-align: center; font-size: 12px; color: var(--muted); margin: 14px 0 0; font-style: italic;">Figure 2. Calibration loop. Drift observed → physical parameter identified by name → policy re-distilled locally. Whole cycle runs on the customer's laptop in under 60 seconds.</p>
-    </div>
-  </div>
-</section>
--->
-
-<section id="showcase">
-  <div class="container wide">
-    <div class="eyebrow">成果展示</div>
-    <h2>四個任務、四種物理 regime——今天就能端到端跑通。</h2>
-    <div style="display: grid; gap: 32px;">
-
-      <div>
-        <h3 style="margin: 0 0 4px; font-size: 17px; font-weight: 600; color: var(--ink);">TwoRoom · 2D 導航</h3>
-        <div style="font-size: 11px; color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700; margin: 10px 0 8px;">因果鏈場景 · 神經評分網路 rollout(val_acc 0.9990 · 4/4 成功)</div>
-        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
-          <div class="video"><img src="tworoom_neural_causal_scorer/videos_v2/neural_base.gif" alt="base"><div class="v-cap"><strong>base</strong><span>標準布局</span></div></div>
-          <div class="video"><img src="tworoom_neural_causal_scorer/videos_v2/neural_high_narrow.gif" alt="high_narrow"><div class="v-cap"><strong>high_narrow</strong><span>高位窄門</span></div></div>
-          <div class="video"><img src="tworoom_neural_causal_scorer/videos_v2/neural_low_medium.gif" alt="low_medium"><div class="v-cap"><strong>low_medium</strong><span>低位中等門</span></div></div>
-          <div class="video"><img src="tworoom_neural_causal_scorer/videos_v2/neural_wide_shifted.gif" alt="wide_shifted"><div class="v-cap"><strong>wide_shifted</strong><span>寬門偏移目標</span></div></div>
-        </div>
-        <div style="font-size: 11px; color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700; margin: 16px 0 8px;">反應策略場景 · BC student 蒸餾(80/80 heldout)</div>
-        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
-          <div class="video"><img src="tworoom_causal_student/videos/student_base.gif" alt="base"><div class="v-cap"><strong>base</strong><span>標準</span></div></div>
-          <div class="video"><img src="tworoom_causal_student/videos/student_high_narrow.gif" alt="high_narrow"><div class="v-cap"><strong>high_narrow</strong><span>高位窄門</span></div></div>
-          <div class="video"><img src="tworoom_causal_student/videos/student_low_goal.gif" alt="low_goal"><div class="v-cap"><strong>low_goal</strong><span>低位目標</span></div></div>
-          <div class="video"><img src="tworoom_causal_student/videos/student_wide.gif" alt="wide"><div class="v-cap"><strong>wide</strong><span>寬門布局</span></div></div>
-        </div>
-      </div>
-
-      <div>
-        <h3 style="margin: 0 0 4px; font-size: 17px; font-weight: 600; color: var(--ink);">PushT · 接觸操作</h3>
-        <div style="font-size: 11px; color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700; margin: 10px 0 8px;">因果鏈場景 · true-env 因果樹 teacher(4/4 成功)</div>
-        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
-          <div class="video"><img src="pusht_true_env_causal_tree_pose_lowalpha/videos/pusht_causal_tree_base.gif" alt="base"><div class="v-cap"><strong>base</strong><span>標準推進</span></div></div>
-          <div class="video"><img src="pusht_true_env_causal_tree_pose_lowalpha/videos/pusht_causal_tree_long_push.gif" alt="long_push"><div class="v-cap"><strong>long_push</strong><span>長距推進</span></div></div>
-          <div class="video"><img src="pusht_true_env_causal_tree_pose_lowalpha/videos/pusht_causal_tree_offset.gif" alt="offset"><div class="v-cap"><strong>offset</strong><span>偏移起點</span></div></div>
-          <div class="video"><img src="pusht_true_env_causal_tree_pose_lowalpha/videos/pusht_causal_tree_rotation.gif" alt="rotation"><div class="v-cap"><strong>rotation</strong><span>旋轉對齊</span></div></div>
-        </div>
-        <div style="font-size: 11px; color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700; margin: 16px 0 8px;">反應策略場景 · kNN exemplar student v10(最終 block 誤差 0.81 px · 4/4 成功)</div>
-        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
-          <div class="video"><img src="pusht_causal_student_v10_release_hold_knn7_smoke/videos/pusht_v10_knn_student_ep4.gif" alt="ep4"><div class="v-cap"><strong>episode 4</strong><span>final 0.81 px</span></div></div>
-          <div class="video"><img src="pusht_causal_student_v10_release_hold_knn7_smoke/videos/pusht_v10_knn_student_ep17.gif" alt="ep17"><div class="v-cap"><strong>episode 17</strong><span>final 2.32 px</span></div></div>
-          <div class="video"><img src="pusht_causal_student_v10_release_hold_knn7_smoke/videos_extra/pusht_v10_knn_student_ep0.gif" alt="ep0"><div class="v-cap"><strong>episode 0</strong><span>final 1.43 px</span></div></div>
-          <div class="video"><img src="pusht_causal_student_v10_release_hold_knn7_smoke/videos_extra2/pusht_v10_knn_student_ep18.gif" alt="ep18"><div class="v-cap"><strong>episode 18</strong><span>final 1.53 px</span></div></div>
-        </div>
-      </div>
-
-      <div>
-        <h3 style="margin: 0 0 4px; font-size: 17px; font-weight: 600; color: var(--ink);">Reacher · 手臂控制</h3>
-        <div style="font-size: 11px; color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700; margin: 10px 0 8px;">因果鏈場景 · true-env 因果樹(4/4 成功 · 中位 0.00369)</div>
-        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
-          <div class="video"><img src="reacher_true_env_causal_tree/videos/reacher_causal_tree_base.gif" alt="base"><div class="v-cap"><strong>base</strong><span>seed 0, 終點 0.0031</span></div></div>
-          <div class="video"><img src="reacher_true_env_causal_tree/videos/reacher_causal_tree_offset.gif" alt="offset"><div class="v-cap"><strong>offset</strong><span>seed 1, 終點 0.0036</span></div></div>
-          <div class="video"><img src="reacher_true_env_causal_tree/videos/reacher_causal_tree_wide.gif" alt="wide"><div class="v-cap"><strong>wide</strong><span>seed 4, 終點 0.0040</span></div></div>
-          <div class="video"><img src="reacher_true_env_causal_tree/videos/reacher_causal_tree_hard.gif" alt="hard"><div class="v-cap"><strong>hard</strong><span>seed 7, 終點 0.0038</span></div></div>
-        </div>
-        <div style="font-size: 11px; color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700; margin: 16px 0 8px;">反應策略場景 · student v2(train + val seeds 4/4 成功)</div>
-        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
-          <div class="video"><img src="reacher_causal_student_v2_smoke/videos/reacher_reaction_v2_val_seed4.gif" alt="val_seed4"><div class="v-cap"><strong>val seed 4</strong><span>終點 0.0060</span></div></div>
-          <div class="video"><img src="reacher_causal_student_v2_smoke/videos/reacher_reaction_v2_val_seed5.gif" alt="val_seed5"><div class="v-cap"><strong>val seed 5</strong><span>終點 0.0039</span></div></div>
-          <div class="video"><img src="reacher_causal_student_v2_smoke/videos/reacher_reaction_v2_train_seed0.gif" alt="train_seed0"><div class="v-cap"><strong>train seed 0</strong><span>終點 0.0066</span></div></div>
-          <div class="video"><img src="reacher_causal_student_v2_smoke/videos/reacher_reaction_v2_train_seed1.gif" alt="train_seed1"><div class="v-cap"><strong>train seed 1</strong><span>終點 0.0064</span></div></div>
-        </div>
-      </div>
-
-      <div>
-        <h3 style="margin: 0 0 4px; font-size: 17px; font-weight: 600; color: var(--ink);">OGBench Cube · 抓取放置</h3>
-        <div style="font-size: 11px; color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700; margin: 10px 0 8px;">因果鏈場景 · 神經評分網路 rollout(val_acc 0.9963 · 60/60 selected)</div>
-        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
-          <div class="video"><img src="ogbench_cube_grasp_neural_causal_scorer/videos/ogcube_base.gif" alt="base"><div class="v-cap"><strong>base</strong><span>標準起點</span></div></div>
-          <div class="video"><img src="ogbench_cube_grasp_neural_causal_scorer/videos/ogcube_hard_start.gif" alt="hard_start"><div class="v-cap"><strong>hard_start</strong><span>困難初始姿態</span></div></div>
-          <div class="video"><img src="ogbench_cube_grasp_neural_causal_scorer/videos/ogcube_high_goal.gif" alt="high_goal"><div class="v-cap"><strong>high_goal</strong><span>高位目標</span></div></div>
-          <div class="video"><img src="ogbench_cube_grasp_neural_causal_scorer/videos/ogcube_side_goal.gif" alt="side_goal"><div class="v-cap"><strong>side_goal</strong><span>側位目標</span></div></div>
-        </div>
-        <div style="font-size: 11px; color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700; margin: 16px 0 8px;">反應策略場景 · student v2(跨目標 4/4 成功 · 公分以下精度)</div>
-        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
-          <div class="video"><img src="ogbench_cube_causal_student_v2_smoke/videos/ogcube_reaction_v2_base.gif" alt="base"><div class="v-cap"><strong>base</strong><span>final 0.0130</span></div></div>
-          <div class="video"><img src="ogbench_cube_causal_student_v2_smoke/videos/ogcube_reaction_v2_high_goal.gif" alt="high_goal"><div class="v-cap"><strong>high_goal</strong><span>final 0.0037</span></div></div>
-          <div class="video"><img src="ogbench_cube_causal_student_v2_smoke/videos/ogcube_reaction_v2_side_goal.gif" alt="side_goal"><div class="v-cap"><strong>side_goal</strong><span>final 0.0031</span></div></div>
-          <div class="video"><img src="ogbench_cube_causal_student_v2_smoke/videos/ogcube_reaction_v2_hard_start.gif" alt="hard_start"><div class="v-cap"><strong>hard_start</strong><span>final 0.0042</span></div></div>
-        </div>
-      </div>
-
-    </div>
-
-    <div style="margin-top: 56px;">
-      <div class="eyebrow">已驗證數字</div>
-      <h2 style="font-size: 26px; margin-bottom: 20px;">每一個數字都來自本機已持久化的 artefact。</h2>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>任務</th>
-              <th>因果 / 評分</th>
-              <th>反應策略</th>
-              <th>訓練樣本</th>
-              <th>設備</th>
-              <th>Wall-clock</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>TwoRoom</strong></td>
-              <td><span class="ok">79/80</span> &nbsp; val_acc 0.9990</td>
-              <td><span class="ok">80/80</span> &nbsp; heldout</td>
-              <td>49,920 scorer samples</td>
-              <td>M1 Max · MLX</td>
-              <td>~48 秒</td>
-            </tr>
-            <tr>
-              <td><strong>PushT</strong></td>
-              <td><span class="ok">4/4</span> &nbsp; pose-aware guard</td>
-              <td><span class="ok">2/2</span> &nbsp; success_rate 1.0</td>
-              <td>1,010 train · 315 val</td>
-              <td>M1 Max · MLX</td>
-              <td>~56 秒 + ~112 秒</td>
-            </tr>
-            <tr>
-              <td><strong>Reacher</strong></td>
-              <td><span class="ok">4/4</span> &nbsp; median 0.00369</td>
-              <td><span class="ok">2/2</span> &nbsp; mean 0.00494</td>
-              <td>288 train · 144 val</td>
-              <td>M1 Max · MLX</td>
-              <td>~分鐘級</td>
-            </tr>
-            <tr>
-              <td><strong>OGBench Cube</strong></td>
-              <td><span class="ok">60/60</span> &nbsp; val_acc 0.9963</td>
-              <td><span class="ok">4/4</span> &nbsp; phase-conditioned</td>
-              <td>35,200 scorer samples</td>
-              <td>M1 Max · MLX</td>
-              <td>~25 秒</td>
-            </tr>
-            <tr>
-              <td><strong>OGBench v1 — 4 families</strong></td>
-              <td colspan="2"><span class="ok">8/8 each</span> &nbsp; Cube · PointMaze · Scene · Puzzle</td>
-              <td>443 – 2,724 / family</td>
-              <td>M1 Max · MLX</td>
-              <td>每個 family &lt; 60 秒</td>
-            </tr>
-          </tbody>
-        </table>
-        <p style="font-size: 13px; color: var(--muted); margin-top: 10px; line-height: 1.55;">所有訓練與推論皆在單一 Apple M1 Max(64 GB unified memory)+ MLX 上完成。無 discrete GPU、無雲端運算。Wall-clock 數字從本機 session timestamps 與 checkpoint mtimes 反推;v0.0.3 將原生 instrument wall-clock。</p>
-      </div>
-
-      <div style="margin-top: 44px;">
-        <div class="eyebrow">收斂</div>
-        <h2 style="font-size: 26px; margin-bottom: 8px;">評分網路實際訓練得多快。</h2>
-        <p style="font-size: 14px; color: var(--muted); margin: 0 0 18px;">資料來自本機 <code>metrics.json</code> 各 checkpoint。實線 = val_acc;虛線 = selected_success_rate。Cube 的 selected success rate 在 200 個 iter 內從 6.7% 躍升至 98.3%。</p>
-        <div style="background: #fdfaf3; border: 1px solid var(--line); border-radius: 4px; padding: 24px 16px;">
-          <svg viewBox="0 0 720 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">
-            <line x1="70" y1="40" x2="70" y2="260" stroke="#0e0e0e" stroke-width="1"/>
-            <line x1="70" y1="260" x2="690" y2="260" stroke="#0e0e0e" stroke-width="1"/>
-            <line x1="70" y1="216" x2="690" y2="216" stroke="#eee"/>
-            <text x="62" y="220" text-anchor="end" font-family="SF Mono, monospace" font-size="10" fill="#666">0.2</text>
-            <line x1="70" y1="172" x2="690" y2="172" stroke="#eee"/>
-            <text x="62" y="176" text-anchor="end" font-family="SF Mono, monospace" font-size="10" fill="#666">0.4</text>
-            <line x1="70" y1="128" x2="690" y2="128" stroke="#eee"/>
-            <text x="62" y="132" text-anchor="end" font-family="SF Mono, monospace" font-size="10" fill="#666">0.6</text>
-            <line x1="70" y1="84" x2="690" y2="84" stroke="#eee"/>
-            <text x="62" y="88" text-anchor="end" font-family="SF Mono, monospace" font-size="10" fill="#666">0.8</text>
-            <line x1="70" y1="40" x2="690" y2="40" stroke="#eee"/>
-            <text x="62" y="44" text-anchor="end" font-family="SF Mono, monospace" font-size="10" fill="#666">1.0</text>
-            <text x="62" y="263" text-anchor="end" font-family="SF Mono, monospace" font-size="10" fill="#666">0.0</text>
-            <text x="70" y="276" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#666">0</text>
-            <text x="208" y="276" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#666">400</text>
-            <text x="346" y="276" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#666">800</text>
-            <text x="483" y="276" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#666">1200</text>
-            <text x="621" y="276" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#666">1600</text>
-            <text x="380" y="298" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="11" fill="#666">scorer iteration</text>
-            <text x="22" y="150" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="11" fill="#666" transform="rotate(-90 22 150)">metric value (0–1)</text>
-            <polyline points="70,60 139,45 208,42 277,42 345,42 414,41 483,40 552,41 621,41 689,40" fill="none" stroke="#0e0e0e" stroke-width="2"/>
-            <polyline points="70,73 139,59 208,40 277,40 345,40 414,40 483,40 552,40 621,40 689,43" fill="none" stroke="#0e0e0e" stroke-width="1.5" stroke-dasharray="5,3"/>
-            <polyline points="70,128 139,53 208,41 277,42 345,41 414,41 483,42 552,41" fill="none" stroke="#c4502b" stroke-width="2"/>
-            <polyline points="70,245 139,44 208,40 277,40 345,40 414,40 483,40 552,40" fill="none" stroke="#c4502b" stroke-width="1.5" stroke-dasharray="5,3"/>
-            <g fill="#0e0e0e">
-              <circle cx="70" cy="60" r="2.5"/><circle cx="139" cy="45" r="2.5"/><circle cx="208" cy="42" r="2.5"/>
-              <circle cx="277" cy="42" r="2.5"/><circle cx="345" cy="42" r="2.5"/><circle cx="414" cy="41" r="2.5"/>
-              <circle cx="483" cy="40" r="2.5"/><circle cx="552" cy="41" r="2.5"/><circle cx="621" cy="41" r="2.5"/>
-              <circle cx="689" cy="40" r="2.5"/>
-            </g>
-            <g fill="#c4502b">
-              <circle cx="70" cy="128" r="2.5"/><circle cx="139" cy="53" r="2.5"/><circle cx="208" cy="41" r="2.5"/>
-              <circle cx="277" cy="42" r="2.5"/><circle cx="345" cy="41" r="2.5"/><circle cx="414" cy="41" r="2.5"/>
-              <circle cx="483" cy="42" r="2.5"/><circle cx="552" cy="41" r="2.5"/>
-            </g>
-            <rect x="488" y="50" width="195" height="78" fill="#fff" stroke="#ddd" stroke-width="0.5" opacity="0.96"/>
-            <line x1="498" y1="62" x2="523" y2="62" stroke="#0e0e0e" stroke-width="2"/>
-            <text x="528" y="66" font-family="-apple-system, Inter, sans-serif" font-size="10" fill="#0e0e0e">TwoRoom val_acc</text>
-            <line x1="498" y1="78" x2="523" y2="78" stroke="#0e0e0e" stroke-width="1.5" stroke-dasharray="5,3"/>
-            <text x="528" y="82" font-family="-apple-system, Inter, sans-serif" font-size="10" fill="#0e0e0e">TwoRoom selected_succ</text>
-            <line x1="498" y1="94" x2="523" y2="94" stroke="#c4502b" stroke-width="2"/>
-            <text x="528" y="98" font-family="-apple-system, Inter, sans-serif" font-size="10" fill="#c4502b">Cube val_acc</text>
-            <line x1="498" y1="110" x2="523" y2="110" stroke="#c4502b" stroke-width="1.5" stroke-dasharray="5,3"/>
-            <text x="528" y="114" font-family="-apple-system, Inter, sans-serif" font-size="10" fill="#c4502b">Cube selected_succ</text>
-          </svg>
-        </div>
-        <p style="font-size: 12px; color: var(--muted); margin-top: 10px; line-height: 1.55; font-style: italic;"><b>Figure 3.</b> Scorer convergence on Apple M1 Max. Final val_acc: TwoRoom 0.9990 (iter 1,799 · ~48 s wall-clock); Cube 0.9963 (iter 1,399 · ~25 s wall-clock). Source: <code>metrics.json</code> per checkpoint.</p>
-      </div>
-
-      <div style="margin-top: 44px;">
-        <div class="eyebrow">業界對照</div>
-        <h2 style="font-size: 26px; margin-bottom: 8px;">這個成本和業界主流訓練方式比起來如何?</h2>
-        <p style="font-size: 14px; color: var(--muted); margin: 0 0 18px;">在「成本 / 時間 / 摩擦」這條軸上做 apples-to-apples 比較(<em>不是</em> ML capability 的比較——任務 scope 刻意收窄為 spec-driven 控制,並非 general visuomotor policy)。</p>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>成本軸</th>
-                <th>業界 norm</th>
-                <th>Meadow(M1 Max + MLX)</th>
-                <th>比例</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><strong>評分 / 策略訓練時間</strong></td>
-                <td>數小時到數天 on cloud GPU<br><span style="font-size:12px;color:var(--muted);">Diffusion Policy: hours · π0 / VLA: days · LeWM: ~few hours</span></td>
-                <td>消費級筆電 25–60 秒</td>
-                <td><span class="ok">100×–1000×</span> wall-clock 更快</td>
-              </tr>
-              <tr>
-                <td><strong>每一次訓練的 compute 成本</strong></td>
-                <td>$5 – $50 cloud GPU 租用(single-GPU hours)</td>
-                <td>&lt; $0.01 電費(筆電)</td>
-                <td><span class="ok">500×–5000×</span> 每次循環更便宜</td>
-              </tr>
-              <tr>
-                <td><strong>每次漂移事件的 operator 時間</strong></td>
-                <td>~4 小時感測器 log 分析 + 人工重調</td>
-                <td>~60 秒筆電點擊</td>
-                <td><span class="ok">240×</span> operator 生產力</td>
-              </tr>
-              <tr>
-                <td><strong>Wafer / IP 資料外露</strong></td>
-                <td>需上傳雲端(fab 採購門檻)</td>
-                <td>留在客戶本地筆電</td>
-                <td><span class="ok">Binary</span> — 通過 fab IT-security review</td>
-              </tr>
-            </tbody>
-          </table>
-          <p style="font-size: 12px; color: var(--muted); margin-top: 10px; line-height: 1.55; font-style: italic;">業界 norm 區間為公開來源整理的 order-of-magnitude 數字;Meadow 數字為本機實測。我們不主張 ML capability 優勢——比較聚焦在客戶端成本與摩擦上。</p>
-        </div>
-
-        <div style="margin-top: 44px;">
-          <div class="eyebrow">視覺化 · Wall-clock 對照</div>
-          <h2 style="font-size: 26px; margin-bottom: 8px;">從 1 分鐘到 1 天——視覺化呈現。</h2>
-          <p style="font-size: 14px; color: var(--muted); margin: 0 0 18px;">橫軸:log-scale 訓練 wall-clock。縱軸:peak success / val_acc。<strong style="color: #c4502b;">實心橘色</strong>為 Meadow 在 M1 Max + MLX 上的實測點。<strong style="color: #666;">空心灰色</strong>為從公開資料反推的業界 order-of-magnitude 位置。</p>
-          <div style="background: #fdfaf3; border: 1px solid var(--line); border-radius: 4px; padding: 24px 16px;">
-            <svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">
-              <line x1="80" y1="40" x2="80" y2="280" stroke="#0e0e0e" stroke-width="1"/>
-              <line x1="80" y1="280" x2="730" y2="280" stroke="#0e0e0e" stroke-width="1"/>
-              <line x1="80" y1="40" x2="730" y2="40" stroke="#eee"/>
-              <text x="72" y="44" text-anchor="end" font-family="SF Mono, monospace" font-size="10" fill="#666">1.0</text>
-              <line x1="80" y1="100" x2="730" y2="100" stroke="#eee"/>
-              <text x="72" y="104" text-anchor="end" font-family="SF Mono, monospace" font-size="10" fill="#666">0.75</text>
-              <line x1="80" y1="160" x2="730" y2="160" stroke="#eee"/>
-              <text x="72" y="164" text-anchor="end" font-family="SF Mono, monospace" font-size="10" fill="#666">0.50</text>
-              <line x1="80" y1="220" x2="730" y2="220" stroke="#eee"/>
-              <text x="72" y="224" text-anchor="end" font-family="SF Mono, monospace" font-size="10" fill="#666">0.25</text>
-              <text x="72" y="283" text-anchor="end" font-family="SF Mono, monospace" font-size="10" fill="#666">0.0</text>
-              <text x="80" y="296" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#666">1s</text>
-              <text x="188" y="296" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#666">10s</text>
-              <text x="273" y="296" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#666">1m</text>
-              <text x="369" y="296" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#666">10m</text>
-              <text x="465" y="296" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#666">1h</text>
-              <text x="615" y="296" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#666">1d</text>
-              <text x="706" y="296" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#666">1w</text>
-              <line x1="273" y1="40" x2="273" y2="280" stroke="#ddd" stroke-dasharray="2,3"/>
-              <line x1="465" y1="40" x2="465" y2="280" stroke="#ddd" stroke-dasharray="2,3"/>
-              <line x1="615" y1="40" x2="615" y2="280" stroke="#ddd" stroke-dasharray="2,3"/>
-              <line x1="706" y1="40" x2="706" y2="280" stroke="#ddd" stroke-dasharray="2,3"/>
-              <text x="22" y="160" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="11" fill="#666" transform="rotate(-90 22 160)">peak success / val_acc</text>
-              <text x="405" y="320" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="11" fill="#666">training wall-clock (log scale)</text>
-
-              <circle cx="484" cy="58" r="6" fill="#fff" stroke="#666" stroke-width="1.6"/>
-              <line x1="484" y1="58" x2="484" y2="80" stroke="#999" stroke-dasharray="2,2"/>
-              <text x="484" y="92" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#666">Diffusion Policy</text>
-              <text x="484" y="104" text-anchor="middle" font-family="SF Mono, monospace" font-size="9" fill="#888">~1.5 h, single GPU</text>
-
-              <circle cx="517" cy="52" r="6" fill="#fff" stroke="#666" stroke-width="1.6"/>
-              <line x1="517" y1="52" x2="572" y2="138" stroke="#999" stroke-dasharray="2,2"/>
-              <text x="572" y="148" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#666">LeWM</text>
-              <text x="572" y="160" text-anchor="middle" font-family="SF Mono, monospace" font-size="9" fill="#888">~3 h, single GPU</text>
-
-              <circle cx="647" cy="69" r="6" fill="#fff" stroke="#666" stroke-width="1.6"/>
-              <line x1="647" y1="69" x2="647" y2="100" stroke="#999" stroke-dasharray="2,2"/>
-              <text x="647" y="112" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#666">π0 / VLA</text>
-              <text x="647" y="124" text-anchor="middle" font-family="SF Mono, monospace" font-size="9" fill="#888">~days, multi-GPU</text>
-
-              <line x1="232" y1="41" x2="273" y2="40" stroke="#c4502b" stroke-width="2" opacity="0.5"/>
-              <circle cx="232" cy="41" r="7" fill="#c4502b"/>
-              <line x1="232" y1="41" x2="180" y2="180" stroke="#c4502b" stroke-dasharray="2,2"/>
-              <text x="180" y="194" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#c4502b" font-weight="700">Meadow · Cube scorer</text>
-              <text x="180" y="206" text-anchor="middle" font-family="SF Mono, monospace" font-size="9" fill="#c4502b">25 s on M1 Max</text>
-
-              <circle cx="273" cy="40" r="7" fill="#c4502b"/>
-              <line x1="273" y1="40" x2="350" y2="180" stroke="#c4502b" stroke-dasharray="2,2"/>
-              <text x="350" y="194" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#c4502b" font-weight="700">Meadow · TwoRoom scorer</text>
-              <text x="350" y="206" text-anchor="middle" font-family="SF Mono, monospace" font-size="9" fill="#c4502b">60 s on M1 Max</text>
-
-              <path d="M 273 245 L 615 245" stroke="#c4502b" stroke-width="1.5" opacity="0.5"/>
-              <path d="M 273 240 L 273 250" stroke="#c4502b" stroke-width="1.5" opacity="0.5"/>
-              <path d="M 615 240 L 615 250" stroke="#c4502b" stroke-width="1.5" opacity="0.5"/>
-              <text x="444" y="262" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="11" fill="#c4502b" font-style="italic">~1,400× wall-clock gap, from 1 minute to 1 day</text>
-            </svg>
-          </div>
-          <p style="font-size: 12px; color: var(--muted); margin-top: 10px; line-height: 1.55; font-style: italic;"><b>Figure 4.</b> 與「業界對照」表相同資料,以 log-time 軸視覺化。空心標記為從公開資料(papers / project pages)反推得到;source verification 見 Figure 5。任務 contract 在各 system 間不同——本圖不是 head-to-head ML benchmark,呈現的是部署面差距。</p>
-        </div>
-
-        <div style="margin-top: 44px;">
-          <div class="eyebrow">透明度 &amp; Due Diligence</div>
-          <h2 style="font-size: 26px; margin-bottom: 8px;">我們公開了業界普遍不公開的東西。</h2>
-          <p style="font-size: 14px; color: var(--muted); margin: 0 0 18px;">直接 fetch 各 system 公開頁面(2026 年 4 月)。在 5 個 robotics 採購方在 due diligence 時會問的 metric 上,Meadow 是這個比較集合中唯一全部公開精確數字的 system。</p>
-
-          <div style="background: #fdfaf3; border: 1px solid var(--line); border-radius: 4px; padding: 24px 16px;">
-            <svg viewBox="0 0 760 380" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">
-              <text x="380" y="22" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="12" fill="#0e0e0e" font-weight="700">Public training-metric transparency · 5 systems × 5 axes</text>
-
-              <text x="220" y="62" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" font-weight="700" fill="#0e0e0e">Wall-clock</text>
-              <text x="320" y="62" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" font-weight="700" fill="#0e0e0e">GPU spec</text>
-              <text x="420" y="62" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" font-weight="700" fill="#0e0e0e">Sample count</text>
-              <text x="520" y="62" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" font-weight="700" fill="#0e0e0e">Success rate</text>
-              <text x="620" y="62" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" font-weight="700" fill="#0e0e0e">Inference latency</text>
-
-              <line x1="170" y1="72" x2="670" y2="72" stroke="#0e0e0e" stroke-width="0.8"/>
-
-              <!-- Row 1: Meadow -->
-              <text x="160" y="106" text-anchor="end" font-family="-apple-system, Inter, sans-serif" font-size="13" font-weight="700" fill="#c4502b">Meadow v0.0.2</text>
-              <text x="160" y="120" text-anchor="end" font-family="SF Mono, monospace" font-size="9" fill="#888">(this work)</text>
-              <rect x="175" y="86" width="90" height="40" fill="#c4502b" stroke="#c4502b"/>
-              <text x="220" y="111" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="14" font-weight="700" fill="#fff">✓</text>
-              <rect x="275" y="86" width="90" height="40" fill="#c4502b" stroke="#c4502b"/>
-              <text x="320" y="111" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="14" font-weight="700" fill="#fff">✓</text>
-              <rect x="375" y="86" width="90" height="40" fill="#c4502b" stroke="#c4502b"/>
-              <text x="420" y="111" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="14" font-weight="700" fill="#fff">✓</text>
-              <rect x="475" y="86" width="90" height="40" fill="#c4502b" stroke="#c4502b"/>
-              <text x="520" y="111" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="14" font-weight="700" fill="#fff">✓</text>
-              <rect x="575" y="86" width="90" height="40" fill="#c4502b" stroke="#c4502b"/>
-              <text x="620" y="111" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="14" font-weight="700" fill="#fff">✓</text>
-
-              <!-- Row 2: LeWM -->
-              <text x="160" y="156" text-anchor="end" font-family="-apple-system, Inter, sans-serif" font-size="13" fill="#444">LeWM</text>
-              <text x="160" y="170" text-anchor="end" font-family="SF Mono, monospace" font-size="9" fill="#888">le-wm.github.io</text>
-              <rect x="175" y="136" width="90" height="40" fill="#fafaf6" stroke="#bbb"/>
-              <text x="220" y="161" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="11" fill="#999" font-style="italic">~ vague</text>
-              <rect x="275" y="136" width="90" height="40" fill="#fafaf6" stroke="#bbb"/>
-              <text x="320" y="161" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="11" fill="#999" font-style="italic">~ vague</text>
-              <rect x="375" y="136" width="90" height="40" fill="#ffffff" stroke="#ccc" stroke-dasharray="3,2"/>
-              <text x="420" y="161" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="14" fill="#bbb">—</text>
-              <rect x="475" y="136" width="90" height="40" fill="#ffffff" stroke="#ccc" stroke-dasharray="3,2"/>
-              <text x="520" y="161" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="14" fill="#bbb">—</text>
-              <rect x="575" y="136" width="90" height="40" fill="#fafaf6" stroke="#bbb"/>
-              <text x="620" y="161" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="11" fill="#999" font-style="italic">~ relative</text>
-
-              <!-- Row 3: Diffusion Policy -->
-              <text x="160" y="206" text-anchor="end" font-family="-apple-system, Inter, sans-serif" font-size="13" fill="#444">Diffusion Policy</text>
-              <text x="160" y="220" text-anchor="end" font-family="SF Mono, monospace" font-size="9" fill="#888">Columbia / Toyota</text>
-              <rect x="175" y="186" width="90" height="40" fill="#ffffff" stroke="#ccc" stroke-dasharray="3,2"/>
-              <text x="220" y="211" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="14" fill="#bbb">—</text>
-              <rect x="275" y="186" width="90" height="40" fill="#ffffff" stroke="#ccc" stroke-dasharray="3,2"/>
-              <text x="320" y="211" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="14" fill="#bbb">—</text>
-              <rect x="375" y="186" width="90" height="40" fill="#ffffff" stroke="#ccc" stroke-dasharray="3,2"/>
-              <text x="420" y="211" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="14" fill="#bbb">—</text>
-              <rect x="475" y="186" width="90" height="40" fill="#fafaf6" stroke="#bbb"/>
-              <text x="520" y="211" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="11" fill="#999" font-style="italic">~ relative</text>
-              <rect x="575" y="186" width="90" height="40" fill="#ffffff" stroke="#ccc" stroke-dasharray="3,2"/>
-              <text x="620" y="211" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="14" fill="#bbb">—</text>
-
-              <!-- Row 4: π0 / Physical Intelligence -->
-              <text x="160" y="256" text-anchor="end" font-family="-apple-system, Inter, sans-serif" font-size="13" fill="#444">π0 / Physical Intelligence</text>
-              <text x="160" y="270" text-anchor="end" font-family="SF Mono, monospace" font-size="9" fill="#888">pi.website/blog/openpi</text>
-              <rect x="175" y="236" width="90" height="40" fill="#ffffff" stroke="#ccc" stroke-dasharray="3,2"/>
-              <text x="220" y="261" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="14" fill="#bbb">—</text>
-              <rect x="275" y="236" width="90" height="40" fill="#ffffff" stroke="#ccc" stroke-dasharray="3,2"/>
-              <text x="320" y="261" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="14" fill="#bbb">—</text>
-              <rect x="375" y="236" width="90" height="40" fill="#fafaf6" stroke="#bbb"/>
-              <text x="420" y="261" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="11" fill="#999" font-style="italic">~ vague</text>
-              <rect x="475" y="236" width="90" height="40" fill="#ffffff" stroke="#ccc" stroke-dasharray="3,2"/>
-              <text x="520" y="261" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="14" fill="#bbb">—</text>
-              <rect x="575" y="236" width="90" height="40" fill="#fafaf6" stroke="#bbb"/>
-              <text x="620" y="261" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="11" fill="#999" font-style="italic">~ relative</text>
-
-              <!-- Row 5: Unitree -->
-              <text x="160" y="306" text-anchor="end" font-family="-apple-system, Inter, sans-serif" font-size="13" fill="#444">Unitree (humanoid + quad)</text>
-              <text x="160" y="320" text-anchor="end" font-family="SF Mono, monospace" font-size="9" fill="#888">unitreerobotics/unitree_rl_gym</text>
-              <rect x="175" y="286" width="90" height="40" fill="#ffffff" stroke="#ccc" stroke-dasharray="3,2"/>
-              <text x="220" y="311" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="14" fill="#bbb">—</text>
-              <rect x="275" y="286" width="90" height="40" fill="#ffffff" stroke="#ccc" stroke-dasharray="3,2"/>
-              <text x="320" y="311" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="14" fill="#bbb">—</text>
-              <rect x="375" y="286" width="90" height="40" fill="#ffffff" stroke="#ccc" stroke-dasharray="3,2"/>
-              <text x="420" y="311" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="14" fill="#bbb">—</text>
-              <rect x="475" y="286" width="90" height="40" fill="#ffffff" stroke="#ccc" stroke-dasharray="3,2"/>
-              <text x="520" y="311" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="14" fill="#bbb">—</text>
-              <rect x="575" y="286" width="90" height="40" fill="#ffffff" stroke="#ccc" stroke-dasharray="3,2"/>
-              <text x="620" y="311" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="14" fill="#bbb">—</text>
-
-              <!-- Legend -->
-              <rect x="170" y="346" width="14" height="14" fill="#c4502b" stroke="#c4502b"/>
-              <text x="190" y="357" font-family="-apple-system, Inter, sans-serif" font-size="11" fill="#444">precise number published</text>
-              <rect x="350" y="346" width="14" height="14" fill="#fafaf6" stroke="#bbb"/>
-              <text x="370" y="357" font-family="-apple-system, Inter, sans-serif" font-size="11" fill="#444">vague / relative only</text>
-              <rect x="510" y="346" width="14" height="14" fill="#ffffff" stroke="#ccc" stroke-dasharray="3,2"/>
-              <text x="530" y="357" font-family="-apple-system, Inter, sans-serif" font-size="11" fill="#444">not published (verified by direct fetch)</text>
-            </svg>
-          </div>
-          <p style="font-size: 12px; color: var(--muted); margin-top: 10px; line-height: 1.55; font-style: italic;"><b>Figure 5.</b> 資料來源:直接 fetch 各 system 的公開頁面(2026 年 4 月,可重現驗證)。不公開有合理的商業理由;本矩陣<em>不是</em>指控。重點在於採購端的可驗證性:在 Meadow 上 due diligence 可以逐筆查證上述每一個數字;在其他 system 上同樣的比較需要從間接訊號推測。</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="wedge">
-  <div class="container">
-    <div class="eyebrow">切入市場</div>
-    <h2>半導體設備校正——最痛、付費意願最高。</h2>
-    <p>單一台 EUV 微影機台造價 $200M 以上。一小時非計畫停機就燒掉數十萬美元。Operator 目前診斷 chamber drift 的方式是讀感測器 log、調整參數、重跑 test wafer——通常每次漂移事件需要 4 小時。</p>
-    <p>Fab 本來就追蹤具名物理參數:chamber pressure、laser drift、alignment offset。Meadow 的 spec-driven 校正迴圈直接 map 到他們既有的資料結構,不需要 paradigm 級別的改變。</p>
-    <p>創辦人在台灣,離各大 fab 與 tier-1 設備供應商一小時車程內——這是海外競爭者在早期客戶探索與 pilot 階段沒有的物理存取優勢。本公開文件不點名具體買家。</p>
-    <p>量化價值:<strong>60 秒筆電時間取代 4 小時 operator 分析</strong>——每一次漂移事件,operator 生產力提升大約兩個數量級。關鍵是,所有校正都在工程師本地筆電上完成;wafer 與專有資料不離開 fab perimeter——這移除了 IT security review 的一個真實採購阻礙。</p>
-    <p class="pull">Beachhead:在 wedge 垂直市場找 design partners。延伸:工業機器人整合商、自駕場景測試、手術機器人——同樣的 approach 在第一個垂直站穩後即可一般化。</p>
-  </div>
-</section>
-
-<section id="qa">
-  <div class="container">
-    <div class="eyebrow">常見問題</div>
-    <h2>七個問題,直接回答。</h2>
-    <p style="margin-bottom: 20px;">研究者、投資人、合作夥伴常問的問題——以適合公開文件的細節層次回答。更深入的細節會在個別對話中分享。</p>
-
-    <div class="qa-list">
-
-      <div class="qa-item">
-        <div class="qid">Q1</div>
-        <h3>Meadow 在做什麼?</h3>
-        <p>Meadow 把客製化機器人部署從「數週的示範收集 + 工程師調參」轉換為「5 分鐘的規格更動」。工程師用具型別、具名的規格描述機器人與目標;系統產生可部署、毫秒級延遲的反應策略,在客戶本地硬體上運作。當真實世界發生漂移,系統會定位<em>哪一個</em>物理參數偏離了原假設,並只在本地修正,不需要重訓整個策略。</p>
-      </div>
-
-      <div class="qa-item">
-        <div class="qid">Q2</div>
-        <h3>為什麼是這個團隊?</h3>
-        <p>黃聖凱(Sheng-Kai Huang)。物理與 ML 系統背景。多年在「資料驅動預測」與「因果物理推理」這條邊界上工作——這正是 Meadow 所要解決的核心 gap。</p>
-        <p>單人完成並 ship 四個已驗證的展示任務,加上一條 pipeline 跑通四個標準化 benchmark family,所有 artefact 皆可重現。熟悉 device-side Apple Silicon ML 堆疊與相關模擬工具。</p>
-        <p>現階段刻意維持單人 founder:迭代快、決策一致。在策略契合的前提下,歡迎引進強的商業 co-founder。</p>
-      </div>
-
-      <div class="qa-item">
-        <div class="qid">Q3</div>
-        <h3>取徑特別在哪?</h3>
-        <ul class="plain">
-          <li><strong>物理優先的輸入。</strong>系統從具名物理狀態開始,而不是像素——這跟生物智能的起點一致(在視覺成熟之前的前庭、本體感覺、接觸訊號)。</li>
-          <li><strong>消費級筆電上的分鐘以內訓練。</strong>Apple Silicon 上 60 秒以內完成訓練——無 discrete GPU、無雲端。現場工程師可以在自己的機器上、用一杯咖啡的時間完成重新校正。</li>
-          <li><strong>具名變數校正。</strong>當部署的策略發生漂移,我們指出<em>哪一個</em>物理參數偏離了——不是模糊的 concept drift——並在本地只修正那一個量。</li>
-          <li><strong>把可重現視為一級特性。</strong>本文件每一個數字都可以從本頁的公開 artefact 驗證;這個透明度在當前領域中是少見的(見 Figure 5)。</li>
-        </ul>
-      </div>
-
-      <div class="qa-item">
-        <div class="qid">Q4</div>
-        <h3>進度到哪?</h3>
-        <p>產品(v0.0.2 已 ship,所有實驗在單一 Apple M1 Max + MLX 上完成):</p>
-        <ul class="plain">
-          <li>4 個展示任務,皆有持久化 artefact(TwoRoom、PushT、Reacher、OGBench Cube)</li>
-          <li>4 個 OGBench v1 family 用同一條 pipeline 通過(每個 8/8、443–2,724 samples / family)</li>
-          <li>PushT 上達到次像素反應精度(最終 block 誤差 0.81 px)</li>
-          <li>反應推論延遲 0.095–0.122 ms(Core ML;對 &lt; 2 MB 的 policy,CPU+GPU 為 benchmark 最佳組合)</li>
-          <li>可部署的 artefact 大小 0.077–2.04 MB</li>
-          <li><strong>評分網路訓練 wall-clock:</strong>~48 秒(TwoRoom, 1,799 iter)· ~25 秒(Cube, 1,399 iter)——消費級 M1 Max,無雲端 GPU</li>
-          <li><strong>反應策略蒸餾 wall-clock:</strong>~112 秒(PushT student v10)在同一台機器上</li>
-        </ul>
-        <p>客戶端:pre-revenue。半導體設備工程師客戶探索訪談進行中。目標:第一個付費 pilot 在六個月內。</p>
-        <p>資金:bootstrap,目前無外部投資。</p>
-      </div>
-
-      <div class="qa-item">
-        <div class="qid">Q5</div>
-        <h3>還有誰在做類似的事?</h3>
-        <ul class="plain">
-          <li><strong>Diffusion Policy</strong>(Columbia / Toyota):visuomotor diffusion。在示範資料豐富的任務上強。無校正迴圈。卡在示範收集瓶頸。</li>
-          <li><strong>π0 / Physical Intelligence</strong>:VLA on millions of demonstrations。Demo 印象深刻。資本密集的資料收集。</li>
-          <li><strong>Skild AI</strong>:robotics 基礎模型。$300M raised, pre-revenue。不同的 bet——示範規模。</li>
-          <li><strong>傳統 PLC</strong>(Siemens、Rockwell):人工調參,無學習。</li>
-          <li><strong>Applied Intuition</strong>:自駕模擬。鄰近領域,不直接競爭。</li>
-          <li><strong>LeWM / AMI Labs</strong>:pixel JEPA world models。不同的 stack 層級(perception);可以接在 Meadow 的上游。</li>
-        </ul>
-        <p>Meadow 佔的是一個乾淨的空白:spec-driven、demo-light、calibration-native。</p>
-      </div>
-
-      <div class="qa-item">
-        <div class="qid">Q6</div>
-        <h3>商業模式如何運作?</h3>
-        <p>B2B,兩條收入流:</p>
-        <ul class="plain">
-          <li><strong>Per-deployment licensing</strong>——取代 2+ 週的整合商工程,且整合商成本顯著更高。Pricing 採詢價制。</li>
-          <li><strong>校正 SaaS</strong>——持續的本地漂移修正與策略 refresh。在客戶本地筆電上運作,不在我們的雲端;專有資料不離開客戶 perimeter——這對安全性敏感的產業移除了真實的採購阻礙。</li>
-        </ul>
-        <p>Pilot 級經濟規模隨買方可衡量的付費意願(良率提升、停機減少)而 scale。具體數字在評估對話中、在適當保密層級下分享。</p>
-      </div>
-
-      <div class="qa-item">
-        <div class="qid">Q7</div>
-        <h3>還有什麼值得知道?</h3>
-        <p>創辦人位於台灣,目前 bootstrap。在策略契合的前提下,歡迎遷址、遠端合作或 co-founder partnership。</p>
-        <p>多模態 grounding(將觸覺、本體感覺、慣性訊號與既有的具型別輸入整合)是進行中的開發方向。</p>
-        <p>長期:Meadow 從第一個垂直一般化到工業機器人、自駕場景測試、手術機器人,以及更廣的 embodied AI。Wedge 是第一個垂直,不是天花板。</p>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<section id="founder">
-  <div class="container">
-    <div class="eyebrow">創辦人</div>
-    <h2>黃聖凱(Sheng-Kai Huang)。</h2>
-    <p>物理與 ML 系統背景。多年在「預測式建模」與「因果物理結構」這條邊界上工作——Meadow 把這個邊界 operationalize 為機器人控制。</p>
-    <p>工業機器人被一個工程瓶頸卡住,而主流 ML 範式(以示範為基礎的 imitation)無法乾淨地解。Apple Silicon 與邊緣推論現在讓毫秒級可部署策略變得實際;一個 Asia-based 的 founder 團隊也具備海外競爭者沒有的結構性 access 優勢。</p>
-    <p>Meadow 是兩年迭代的結果——關於如何正確地分解物理、價值、策略三件事。讓這些公開成果得以成立的具體架構,我們在更深入的對話中、在適當保密層級下分享。</p>
-  </div>
-</section>
-
-<section id="roadmap">
-  <div class="container">
-    <div class="eyebrow">發展方向</div>
-    <h2>工作預計怎麼推進。</h2>
-    <div class="timeline">
-      <div class="tl-row">
-        <div class="when">Phase 1</div>
-        <div class="what">在 wedge 垂直市場進行客戶探索;少量 design partner;校正迴圈在真實客戶資料上驗證。</div>
-      </div>
-      <div class="tl-row">
-        <div class="when">Phase 2</div>
-        <div class="what">第一批付費 pilot。多感測器整合進 spec frame。校正迴圈在真實客戶硬體上運作。</div>
-      </div>
-      <div class="tl-row">
-        <div class="when">Phase 3</div>
-        <div class="what">多個付費客戶。延伸至第二個垂直。多模態 grounding 作為 production feature 上線。</div>
-      </div>
-    </div>
-    <p style="font-size: 13px; color: var(--muted); margin-top: 14px; font-style: italic;">具體時程、客戶端 milestone 與資金計畫,在適當保密層級下個別討論。</p>
-  </div>
-</section>
-
-<section id="ask">
-  <div class="container">
-    <div class="eyebrow">聯絡我們</div>
-    <h2>若有任何一段與您共鳴,歡迎聯絡。</h2>
-    <p>本文件是公開 snapshot——刻意在架構與 pipeline 上保持輕度。完整的圖像,包括讓這些公開成果得以成立的具體細節,我們在直接對話中、在適合的保密層級下分享。</p>
-    <div class="ask-list">
-      <div class="ask-item">
-        <h3>研究者</h3>
-        <p>若您的工作與 grounded action、on-device 校正、或 device-side robot learning 相關,我們很樂意分享更多細節,並討論可能的合作方向。</p>
-      </div>
-      <div class="ask-item">
-        <h3>投資人</h3>
-        <p>架構、pipeline、商業模式、資金計畫皆在 NDA 下可分享。歡迎聯絡進行深入評估。</p>
-      </div>
-      <div class="ask-item">
-        <h3>合作夥伴 &amp; 客戶</h3>
-        <p>若您經營的設備、機器人、或工業自動化系統可能因 on-device 具名變數校正而受益,歡迎聊聊可能的 pilot。</p>
-      </div>
-    </div>
-    <p class="pull">黃聖凱 Sheng-Kai Huang · <a href="mailto:akai@fawstudio.com" style="color: #fff; border-bottom: 1px solid rgba(255,255,255,0.4);">akai@fawstudio.com</a> · 台灣台北</p>
-  </div>
-</section>
-
-<footer>
-  <div class="container">
-    <div class="row">
-      <span>Meadow · 公開技術概覽 2026</span>
-      <span>黃聖凱 · akai@fawstudio.com</span>
-    </div>
-  </div>
-</footer>
 
 </body>
 </html>
