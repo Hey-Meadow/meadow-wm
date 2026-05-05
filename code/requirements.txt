@@ -1,0 +1,14 @@
+mlx>=0.22.0
+mlx-lm>=0.1.0
+numpy>=1.24.0
+gymnasium>=1.0.0
+safetensors>=0.4.0
+Pillow>=10.0.0
+tqdm>=4.65.0
+
+# External world-model framework (pip-installable)
+# Used for environment registry / wrappers in PushT and Reacher training
+stable-worldmodel>=0.0.6
+
+# Optional (eval tooling)
+torch>=2.0.0

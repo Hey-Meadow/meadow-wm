@@ -46,7 +46,16 @@ A **named-variable calibration loop** closes the system: when deployed behavior 
 
 All numbers reported in the [full report](web/meadow_ami.pdf) come from local artifacts on a single Apple M1 Max workstation. Per-checkpoint scorer convergence is captured in local `metrics.json` files; videos in [`web/`](web/) subdirectories are direct rollouts from the trained checkpoints (not curated highlights).
 
-**Code release**: source code is available on request — please email `akai@fawstudio.com` with a brief description of intended use. The 32 rollout videos in [`web/`](web/) provide visual reproduction of the four showcase tasks; the report PDF contains exact wall-clock, sample counts, and evaluation protocol.
+**Code**: 11 reproducer scripts (Layer 2 scorer training + Layer 3 reaction policy distillation) for all four showcase tasks are in [`code/`](code/). See [`code/README.md`](code/README.md) for setup and quick-start commands.
+
+```bash
+pip install -r code/requirements.txt
+python code/train_pusht_causal_student_v2.py --output runs/pusht_v2     # PushT 0.81 px sub-pixel
+python code/train_ogbench_cube_neural_causal_scorer.py --output runs/cube_scorer
+# ... see code/README.md for all four tasks
+```
+
+External dependency: [`stable-worldmodel`](https://github.com/galilai-group/stable-worldmodel) (Maes / Le Lidec / Balestriero) is used as the shared environment registry — same package as [LeWM](https://github.com/lucas-maes/le-wm).
 
 ---
 
@@ -54,6 +63,13 @@ All numbers reported in the [full report](web/meadow_ami.pdf) come from local ar
 
 ```
 README.md                 # This file
+LICENSE                   # MIT
+code/                     # Reproducer scripts (11 files, 232 KB)
+  README.md               # Setup + quick-start commands
+  requirements.txt        # mlx, mlx-lm, gymnasium, stable-worldmodel, ...
+  meadow_student_backbone.py
+  rtg_translator.py / ik_reacher.py     # Task-specific helpers
+  train_*.py              # Layer 2 scorer + Layer 3 reaction policy training (all 4 tasks)
 web/                      # Cloudflare Pages deployment source
   index.html              # Full English report
   index_zh.html           # 完整繁體中文報告
@@ -84,8 +100,8 @@ web/                      # Cloudflare Pages deployment source
 
 ## License
 
-Report and rollout videos: **CC BY-NC 4.0** (attribution + non-commercial).
-Source code license: to be determined upon release — contact `akai@fawstudio.com`.
+**MIT** for all source code in [`code/`](code/) — see [`LICENSE`](LICENSE).
+Report and rollout videos in [`web/`](web/): CC BY-NC 4.0 (attribution + non-commercial).
 
 ---
 
