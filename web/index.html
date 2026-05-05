@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meadow — YC Application</title>
+<style>
+  :root {
+    --bg: #faf8f3;
+    --surface: #ffffff;
+    --ink: #0e0e0e;
+    --ink-2: #2a2a2a;
+    --muted: #666666;
+    --line: #e5e2da;
+    --line-strong: #d0ccc1;
+    --accent: #c4502b;
+    --accent-soft: rgba(196, 80, 43, 0.08);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, "SF Pro Text", "Inter", "Helvetica Neue", Arial, sans-serif;
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .container {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+  .container.wide {
+    max-width: 1080px;
+  }
+
+  /* Top bar */
+  .topbar {
+    border-bottom: 1px solid var(--line);
+    padding: 22px 0;
+  }
+  .topbar-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+  }
+  .topbar .brand {
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  .topbar .meta {
+    color: var(--muted);
+  }
+
+  /* Hero */
+  .hero {
+    padding: 120px 0 100px;
+    border-bottom: 1px solid var(--line);
+  }
+  .hero .label {
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 28px;
+    font-weight: 600;
+  }
+  .hero h1 {
+    font-family: "Charter", "Iowan Old Style", "Georgia", serif;
+    font-size: clamp(44px, 6.4vw, 76px);
+    font-weight: 500;
+    line-height: 1.06;
+    letter-spacing: -0.02em;
+    margin: 0 0 28px;
+    color: var(--ink);
+  }
+  .hero .lede {
+    font-size: 21px;
+    line-height: 1.5;
+    color: var(--ink-2);
+    margin: 0 0 20px;
+    max-width: 640px;
+  }
+  .hero .sub {
+    font-size: 17px;
+    color: var(--muted);
+    margin: 0;
+    max-width: 640px;
+  }
+
+  /* Section */
+  section {
+    padding: 96px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  section:last-of-type {
+    border-bottom: 0;
+  }
+
+  .eyebrow {
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 18px;
+  }
+
+  h2 {
+    font-family: "Charter", "Iowan Old Style", "Georgia", serif;
+    font-size: clamp(30px, 3.6vw, 42px);
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    margin: 0 0 32px;
+    color: var(--ink);
+  }
+
+  h3 {
+    font-size: 19px;
+    font-weight: 600;
+    line-height: 1.35;
+    margin: 0 0 8px;
+    color: var(--ink);
+  }
+
+  p { margin: 0 0 18px; color: var(--ink-2); }
+  p:last-child { margin-bottom: 0; }
+
+  ul.plain, ol.plain {
+    margin: 0 0 18px;
+    padding-left: 22px;
+  }
+  ul.plain li, ol.plain li {
+    color: var(--ink-2);
+    margin-bottom: 8px;
+    line-height: 1.6;
+  }
+
+  /* Stat row in hero / inline */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+    margin-top: 56px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line);
+  }
+  .stat strong {
+    display: block;
+    font-family: "Charter", "Georgia", serif;
+    font-size: 32px;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+  .stat span {
+    display: block;
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  /* Numbered points */
+  .points {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: pt;
+  }
+  .points > li {
+    counter-increment: pt;
+    padding: 28px 0;
+    border-top: 1px solid var(--line);
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 24px;
+    align-items: baseline;
+  }
+  .points > li:first-child { border-top: 0; padding-top: 0; }
+  .points > li::before {
+    content: counter(pt, decimal-leading-zero);
+    font-family: "Charter", "Georgia", serif;
+    font-size: 22px;
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .points h3 { margin-bottom: 6px; }
+  .points p { color: var(--muted); margin: 0; }
+
+  /* Layer block (3-layer architecture) */
+  .layers {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    margin-top: 8px;
+  }
+  .layer {
+    padding: 24px 0;
+    border-top: 1px solid var(--line);
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 28px;
+    align-items: baseline;
+  }
+  .layer:first-child { border-top: 0; padding-top: 0; }
+  .layer .layer-tag {
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+  .layer .layer-body h3 { margin-bottom: 6px; }
+  .layer .layer-body p { color: var(--muted); margin: 0; }
+
+  /* Pull quote */
+  .pull {
+    border-left: 2px solid var(--accent);
+    padding-left: 22px;
+    margin: 32px 0 0;
+    font-family: "Charter", "Georgia", serif;
+    font-size: 20px;
+    line-height: 1.5;
+    color: var(--ink);
+    font-style: italic;
+  }
+
+  /* Video grid */
+  .videos {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-top: 8px;
+  }
+  .video {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    overflow: hidden;
+    border-radius: 4px;
+  }
+  .video img, .video video {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    display: block;
+    object-fit: cover;
+    background: #efece5;
+  }
+  .video .v-cap {
+    padding: 14px 16px 16px;
+    border-top: 1px solid var(--line);
+  }
+  .video .v-cap strong {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .video .v-cap span {
+    display: block;
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.45;
+  }
+
+  /* Verified table */
+  .table-wrap {
+    margin-top: 8px;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    overflow: hidden;
+    background: var(--surface);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  th, td {
+    padding: 14px 18px;
+    text-align: left;
+    font-size: 14px;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+  th {
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: rgba(0,0,0,0.015);
+  }
+  tr:last-child td { border-bottom: 0; }
+  td strong { color: var(--ink); font-weight: 600; }
+  .ok {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 2px 8px;
+    border-radius: 999px;
+    letter-spacing: 0.02em;
+  }
+
+  /* QA list */
+  .qa-list {
+    margin-top: 8px;
+  }
+  .qa-item {
+    padding: 32px 0;
+    border-top: 1px solid var(--line);
+  }
+  .qa-item:first-child { border-top: 0; padding-top: 0; }
+  .qa-item .qid {
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    margin-bottom: 8px;
+  }
+  .qa-item h3 {
+    font-family: "Charter", "Georgia", serif;
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1.3;
+    margin-bottom: 16px;
+    color: var(--ink);
+  }
+  .qa-item p { color: var(--ink-2); }
+  .qa-item ul.plain li strong { color: var(--ink); }
+
+  /* Roadmap */
+  .timeline {
+    margin-top: 8px;
+  }
+  .tl-row {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 28px;
+    padding: 22px 0;
+    border-top: 1px solid var(--line);
+    align-items: baseline;
+  }
+  .tl-row:first-child { border-top: 0; padding-top: 0; }
+  .tl-row .when {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.02em;
+  }
+  .tl-row .what { color: var(--ink-2); font-size: 16px; line-height: 1.55; }
+
+  /* Ask */
+  .ask-list {
+    margin-top: 8px;
+  }
+  .ask-item {
+    padding: 24px 0;
+    border-top: 1px solid var(--line);
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 28px;
+    align-items: baseline;
+  }
+  .ask-item:first-child { border-top: 0; padding-top: 0; }
+  .ask-item h3 {
+    font-family: "Charter", "Georgia", serif;
+    font-size: 20px;
+    font-weight: 500;
+    margin: 0;
+  }
+  .ask-item p { color: var(--muted); margin: 0; font-size: 16px; }
+
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 40px 0 60px;
+    text-align: left;
+  }
+  footer .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  @media (max-width: 760px) {
+    .stats { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+    .videos { grid-template-columns: 1fr; }
+    .layer { grid-template-columns: 1fr; gap: 8px; }
+    .points > li { grid-template-columns: 1fr; gap: 8px; }
+    .points > li::before { font-size: 18px; }
+    .tl-row { grid-template-columns: 1fr; gap: 6px; }
+    .ask-item { grid-template-columns: 1fr; gap: 10px; }
+    .hero { padding: 80px 0 64px; }
+    section { padding: 72px 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="container">
+    <div class="topbar-inner">
+      <span class="brand">Meadow</span>
+      <span class="meta">Public Technical Overview · 2026 · Sheng-Kai Huang · <a href="index_zh.html" style="color: var(--muted); border-bottom: 1px dotted var(--muted);">中文</a></span>
+    </div>
+  </div>
+</div>
+
+<section class="hero">
+  <div class="container">
+    <div class="label">Public Overview</div>
+    <h1>Physical models that accelerate AI's world experience and its training.</h1>
+    <p class="lede">Meadow is a physics-grounded learning approach. Engineers provide a typed specification of the robot and the goal; the system produces a deployable reaction policy in under 3 minutes*<sup style="font-size:11px;color:var(--accent);">[note]</sup>, plus a self-supervised pipeline that corrects in real time.</p>
+    <p class="sub">When the world drifts — friction, payload, sensor offset, wear — the named-variable calibration loop identifies which physical parameter changed and re-distills locally. No demo re-collection. No full retrain.</p>
+    <p class="sub" style="font-size: 13px; opacity: 0.7; margin-top: 6px;"><sup style="color:var(--accent);">[note]</sup> Depends on task complexity: ~25 s for the Cube scorer, ~48 s for the TwoRoom scorer, ~168 s for PushT including reaction-policy distillation. All measured on a single Apple M1 Max + MLX. See the Verified Numbers table.</p>
+
+    <div class="stats">
+      <div class="stat"><strong>4 / 4</strong><span>Showcase tasks shipped end-to-end</span></div>
+      <div class="stat"><strong>&lt; 60 s</strong><span>Scorer training on M1 Max + MLX (no cloud, no NVIDIA)</span></div>
+      <div class="stat"><strong>0.81 px</strong><span>PushT final block error (sub-pixel reaction precision)</span></div>
+      <div class="stat"><strong>0.095 ms</strong><span>Reaction inference on Apple Silicon (Core ML)</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="problem">
+  <div class="container">
+    <div class="eyebrow">The Problem</div>
+    <h2>Every custom robot deployment costs two weeks of engineering.</h2>
+    <ol class="points">
+      <li>
+        <div>
+          <h3>Demonstration tax</h3>
+          <p>Diffusion Policy needs hundreds of teleoperated demos per task. VLA pipelines need millions. Every fixture or SKU change restarts collection. Weeks per change.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h3>Manual tuning</h3>
+          <p>When friction, payload, or sensor offset shifts, an operator opens the controller, eyeballs the trajectory, adjusts gains. Hours of expensive labor per drift event.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h3>Black-box drift</h3>
+          <p>End-to-end learned policies cannot tell you what changed. "Concept drift" is the diagnosis. Re-collect demos, re-train, redeploy. The cycle never gets cheaper.</p>
+        </div>
+      </li>
+    </ol>
+    <div style="background: #fdf6e7; border: 1px solid var(--line); border-radius: 4px; padding: 22px 24px; margin: 24px 0;">
+      <div style="font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); font-weight: 700; margin-bottom: 12px;">Where do those two weeks actually go?</div>
+      <p style="font-size: 14px; color: var(--ink-2); margin-bottom: 16px; line-height: 1.65;">Typical allocation across the dominant industry approaches (Diffusion Policy, VLA, traditional PLC tuning):</p>
+      <div class="table-wrap">
+        <table style="font-size: 13px;">
+          <thead>
+            <tr>
+              <th style="width: 16%;">Phase</th>
+              <th style="width: 44%;">What gets built</th>
+              <th style="width: 40%;">Equipment / tooling</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Day 1–3</strong></td>
+              <td>Spec definition + teleoperation demonstration collection (typically hundreds of demos per task)</td>
+              <td>Teleop rig (ALOHA / Mobile ALOHA / Meta Quest leader-follower arms) · physical robot · 1–2 operators</td>
+            </tr>
+            <tr>
+              <td><strong>Day 3–7</strong></td>
+              <td>Data cleaning, labelling, simulator modelling, failure-case re-recording</td>
+              <td>Engineer workstation · cloud storage · simulator (MuJoCo / Isaac Gym)</td>
+            </tr>
+            <tr>
+              <td><strong>Day 7–12</strong></td>
+              <td>Policy training (Diffusion Policy / VLA / RL), hyperparameter sweeps, evaluation</td>
+              <td>Cloud GPU (A100 / H100, ~$5–$50 per cycle) · ML engineer · training framework (PyTorch / JAX)</td>
+            </tr>
+            <tr>
+              <td><strong>Day 12–14</strong></td>
+              <td>Sim-to-real calibration, manual tuning, integration test, documentation</td>
+              <td>Physical robot · operator · controller hardware (Siemens / Rockwell / proprietary PLC)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size: 12px; color: var(--muted); margin-top: 14px; line-height: 1.6; font-style: italic;">Ranges are typical across public reports — Diffusion Policy, ALOHA / Mobile ALOHA, Physical Intelligence π0. Actual timelines vary by task complexity from one week to several. For large foundation-style VLA policies, data collection alone can take weeks to months.</p>
+    </div>
+
+    <p class="pull">The industrial robot market is roughly $200B. Most of it is gated by this engineering bottleneck. Meadow attacks the bottleneck directly.</p>
+  </div>
+</section>
+
+<section id="solution">
+  <div class="container">
+    <div class="eyebrow">Approach</div>
+    <h2>Built for the deployment surface, not the leaderboard.</h2>
+    <p>Three design commitments — kept deliberately at the level of <em>what</em> rather than <em>how</em>. The specific architecture that delivers these outcomes is the part we would rather discuss directly with the right counterpart, not publish in advance.</p>
+
+    <ol class="points" style="margin-top: 22px;">
+      <li>
+        <div>
+          <h3>Inputs are typed and named</h3>
+          <p>The system consumes a structured, named description of the robot, the scene, and the goal — not raw video streams. The benefit is that every variable that drives behaviour has a name an engineer can point at. This is what makes the next two commitments possible.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h3>The deployable artefact is small and fast</h3>
+          <p>Final policies ship at 0.077–2.04 MB and run at 0.095–0.122 ms per decision on consumer Apple Silicon. This is non-negotiable: if it cannot fit on the customer's laptop and respond inside a real control loop, we do not call it deployed.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h3>Drift is named, not opaque</h3>
+          <p>When a deployed policy starts failing in the real world, the system localizes <em>which</em> physical parameter has moved away from the assumption — friction, payload, sensor offset, contact stiffness — and corrects that one quantity locally, not the whole policy. This is the capability most existing approaches do not yet provide; it is also the reason a customer can recalibrate without sending data to the cloud.</p>
+        </div>
+      </li>
+    </ol>
+
+    <p class="pull">The outcomes — sub-minute training, sub-millisecond inference, named-variable calibration — are reproducible from the public artefacts and videos on this page. The specific pipeline that connects them is intentionally held back; if you would like to evaluate it more deeply, please reach out.</p>
+  </div>
+</section>
+
+<!-- internal cut: full Solution architecture section removed for the public version
+<section id="solution-internal">
+  <div class="container">
+    <h2>Three layers, one spec, a closed calibration loop.</h2>
+    <p>Each layer has an explicit role and an explicit learner. Inductive bias is named, traceable, and inspectable end to end.</p>
+    <div style="background: #fafaf6; border: 1px solid var(--line); border-radius: 4px; padding: 28px 22px; margin: 28px 0 32px;">
+      <svg viewBox="0 0 720 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">
+        <defs>
+          <marker id="ycah1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#0e0e0e"/></marker>
+          <marker id="ycah1c" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#c4502b"/></marker>
+        </defs>
+        <rect x="220" y="14" width="280" height="46" fill="#ffffff" stroke="#0e0e0e" rx="3"/>
+        <text x="360" y="33" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="12" font-weight="600">DeviceSpec · SceneSpec · GoalSpec</text>
+        <text x="360" y="50" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="10" fill="#666" font-style="italic">typed physical variables (the only customer input)</text>
+        <line x1="360" y1="60" x2="360" y2="94" stroke="#0e0e0e" marker-end="url(#ycah1)"/>
+        <rect x="40" y="102" width="200" height="74" fill="#ffffff" stroke="#0e0e0e" rx="3"/>
+        <text x="140" y="124" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#666">LAYER 1</text>
+        <text x="140" y="144" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="13" font-weight="600">Physics Expansion</text>
+        <text x="140" y="161" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="10" fill="#666" font-style="italic">no learning · simulator</text>
+        <rect x="260" y="102" width="200" height="74" fill="#ffffff" stroke="#0e0e0e" rx="3"/>
+        <text x="360" y="124" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#666">LAYER 2</text>
+        <text x="360" y="144" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="13" font-weight="600">Neural Scorer</text>
+        <text x="360" y="161" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="10" fill="#666" font-style="italic">value over branches</text>
+        <rect x="480" y="102" width="200" height="74" fill="#ffffff" stroke="#0e0e0e" rx="3"/>
+        <text x="580" y="124" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#666">LAYER 3</text>
+        <text x="580" y="144" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="13" font-weight="600">Reaction Distillation</text>
+        <text x="580" y="161" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="10" fill="#666" font-style="italic">deployable · &lt; 2 MB · 0.1 ms</text>
+        <line x1="240" y1="139" x2="260" y2="139" stroke="#0e0e0e" marker-end="url(#ycah1)"/>
+        <line x1="460" y1="139" x2="480" y2="139" stroke="#0e0e0e" marker-end="url(#ycah1)"/>
+        <line x1="580" y1="176" x2="580" y2="206" stroke="#0e0e0e" marker-end="url(#ycah1)"/>
+        <text x="580" y="225" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="11" fill="#666" font-style="italic">action (Core ML / ONNX / MLX)</text>
+        <path d="M 580 235 Q 580 262 360 262 L 140 262 Q 140 232 140 206" fill="none" stroke="#c4502b" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#ycah1c)"/>
+        <text x="360" y="256" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="10" fill="#c4502b" font-style="italic">named-variable calibration loop · runs on customer's laptop</text>
+      </svg>
+      <p style="text-align: center; font-size: 12px; color: var(--muted); margin: 12px 0 0; font-style: italic;">Figure 1. Spec → Physics → Scorer → Reaction. Orange dashed = on-device calibration feedback (no cloud).</p>
+    </div>
+
+    <div class="layers">
+      <div class="layer">
+        <div class="layer-tag">Layer 1 · Physics</div>
+        <div class="layer-body">
+          <h3>Causal expansion</h3>
+          <p>The simulator advances candidate futures under real physical dynamics. Mass, friction, contact, constraint. No learning here — this layer provides the truthful trajectories that downstream learners consume.</p>
+        </div>
+      </div>
+      <div class="layer">
+        <div class="layer-tag">Layer 2 · Scorer</div>
+        <div class="layer-body">
+          <h3>Neural value learning</h3>
+          <p>A neural scorer learns success likelihood from the branched trajectories. Training distribution is already filtered by physics, so the abstraction respects conservation and feasibility automatically.</p>
+        </div>
+      </div>
+      <div class="layer">
+        <div class="layer-tag">Layer 3 · Reaction</div>
+        <div class="layer-body">
+          <h3>Neural policy distillation</h3>
+          <p>A compact reaction network distills the selected causal chain into a low-latency action policy. Ships to Core ML, ONNX, Torch, or MLX. Benchmarked across CPU / GPU / ANE on Apple Silicon — for our compact policies (&lt; 2 MB), CPU+GPU is the deployment sweet spot at 0.095–0.122 ms per inference.</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="pull">When a deployed robot drifts, the named-variable calibration loop identifies <em>which</em> physical parameter moved — not opaque concept drift — and re-distills the affected policy locally.</p>
+
+    <div style="background: #fafaf6; border: 1px solid var(--line); border-radius: 4px; padding: 24px 18px; margin: 28px 0 0;">
+      <svg viewBox="0 0 480 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:520px;height:auto;display:block;margin:0 auto;">
+        <defs>
+          <marker id="ycah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#c4502b"/></marker>
+        </defs>
+        <circle cx="240" cy="170" r="58" fill="#ffffff" stroke="#0e0e0e" stroke-width="1.5"/>
+        <text x="240" y="164" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="14" font-weight="600">Spec</text>
+        <text x="240" y="183" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="11" fill="#666" font-style="italic">named variables</text>
+        <rect x="170" y="22" width="140" height="56" fill="#ffffff" stroke="#0e0e0e" rx="3"/>
+        <text x="240" y="40" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#666">STEP 1</text>
+        <text x="240" y="58" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="13" font-weight="600">Detect</text>
+        <text x="240" y="73" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="10" fill="#666">trajectory drift</text>
+        <rect x="338" y="142" width="140" height="56" fill="#ffffff" stroke="#0e0e0e" rx="3"/>
+        <text x="408" y="160" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#666">STEP 2</text>
+        <text x="408" y="178" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="13" font-weight="600">Identify</text>
+        <text x="408" y="193" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="10" fill="#666">re-estimate variable</text>
+        <rect x="170" y="262" width="140" height="56" fill="#ffffff" stroke="#0e0e0e" rx="3"/>
+        <text x="240" y="280" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#666">STEP 3</text>
+        <text x="240" y="298" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="13" font-weight="600">Re-expand</text>
+        <text x="240" y="313" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="10" fill="#666">causal tree refresh</text>
+        <rect x="2" y="142" width="140" height="56" fill="#ffffff" stroke="#0e0e0e" rx="3"/>
+        <text x="72" y="160" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#666">STEP 4</text>
+        <text x="72" y="178" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="13" font-weight="600">Re-distill</text>
+        <text x="72" y="193" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="10" fill="#666" font-style="italic">policy update</text>
+        <path d="M 305 76 Q 380 88 395 142" fill="none" stroke="#c4502b" stroke-width="1.6" marker-end="url(#ycah2)"/>
+        <path d="M 395 198 Q 380 252 305 264" fill="none" stroke="#c4502b" stroke-width="1.6" marker-end="url(#ycah2)"/>
+        <path d="M 175 264 Q 100 252 85 198" fill="none" stroke="#c4502b" stroke-width="1.6" marker-end="url(#ycah2)"/>
+        <path d="M 85 142 Q 100 88 175 76" fill="none" stroke="#c4502b" stroke-width="1.6" marker-end="url(#ycah2)"/>
+      </svg>
+      <p style="text-align: center; font-size: 12px; color: var(--muted); margin: 14px 0 0; font-style: italic;">Figure 2. Calibration loop. Drift observed → physical parameter identified by name → policy re-distilled locally. Whole cycle runs on the customer's laptop in under 60 seconds.</p>
+    </div>
+  </div>
+</section>
+-->
+
+<section id="showcase">
+  <div class="container wide">
+    <div class="eyebrow">Showcase</div>
+    <h2>Four tasks, four physical regimes — running end to end today.</h2>
+    <div style="display: grid; gap: 32px;">
+
+      <div>
+        <h3 style="margin: 0 0 4px; font-size: 17px; font-weight: 600; color: var(--ink);">TwoRoom · 2D navigation</h3>
+        <div style="font-size: 11px; color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700; margin: 10px 0 8px;">Causal scenarios · neural scorer rollout (val_acc 0.9990 · 4 / 4 success)</div>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+          <div class="video"><img src="tworoom_neural_causal_scorer/videos_v2/neural_base.gif" alt="base"><div class="v-cap"><strong>base</strong><span>standard layout</span></div></div>
+          <div class="video"><img src="tworoom_neural_causal_scorer/videos_v2/neural_high_narrow.gif" alt="high_narrow"><div class="v-cap"><strong>high_narrow</strong><span>high pos, narrow door</span></div></div>
+          <div class="video"><img src="tworoom_neural_causal_scorer/videos_v2/neural_low_medium.gif" alt="low_medium"><div class="v-cap"><strong>low_medium</strong><span>low pos, medium door</span></div></div>
+          <div class="video"><img src="tworoom_neural_causal_scorer/videos_v2/neural_wide_shifted.gif" alt="wide_shifted"><div class="v-cap"><strong>wide_shifted</strong><span>wide door, shifted goal</span></div></div>
+        </div>
+        <div style="font-size: 11px; color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700; margin: 16px 0 8px;">Reaction scenarios · BC student distillation (80 / 80 heldout)</div>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+          <div class="video"><img src="tworoom_causal_student/videos/student_base.gif" alt="base"><div class="v-cap"><strong>base</strong><span>standard</span></div></div>
+          <div class="video"><img src="tworoom_causal_student/videos/student_high_narrow.gif" alt="high_narrow"><div class="v-cap"><strong>high_narrow</strong><span>high pos, narrow</span></div></div>
+          <div class="video"><img src="tworoom_causal_student/videos/student_low_goal.gif" alt="low_goal"><div class="v-cap"><strong>low_goal</strong><span>low goal</span></div></div>
+          <div class="video"><img src="tworoom_causal_student/videos/student_wide.gif" alt="wide"><div class="v-cap"><strong>wide</strong><span>wide layout</span></div></div>
+        </div>
+      </div>
+
+      <div>
+        <h3 style="margin: 0 0 4px; font-size: 17px; font-weight: 600; color: var(--ink);">PushT · contact manipulation</h3>
+        <div style="font-size: 11px; color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700; margin: 10px 0 8px;">Causal scenarios · true-env causal tree teacher (4 / 4 success)</div>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+          <div class="video"><img src="pusht_true_env_causal_tree_pose_lowalpha/videos/pusht_causal_tree_base.gif" alt="base"><div class="v-cap"><strong>base</strong><span>standard push</span></div></div>
+          <div class="video"><img src="pusht_true_env_causal_tree_pose_lowalpha/videos/pusht_causal_tree_long_push.gif" alt="long_push"><div class="v-cap"><strong>long_push</strong><span>long-range push</span></div></div>
+          <div class="video"><img src="pusht_true_env_causal_tree_pose_lowalpha/videos/pusht_causal_tree_offset.gif" alt="offset"><div class="v-cap"><strong>offset</strong><span>offset start</span></div></div>
+          <div class="video"><img src="pusht_true_env_causal_tree_pose_lowalpha/videos/pusht_causal_tree_rotation.gif" alt="rotation"><div class="v-cap"><strong>rotation</strong><span>rotation alignment</span></div></div>
+        </div>
+        <div style="font-size: 11px; color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700; margin: 16px 0 8px;">Reaction scenarios · kNN exemplar student v10 (final block error 0.81 px · 4 / 4 success)</div>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+          <div class="video"><img src="pusht_causal_student_v10_release_hold_knn7_smoke/videos/pusht_v10_knn_student_ep4.gif" alt="ep4"><div class="v-cap"><strong>episode 4</strong><span>final 0.81 px</span></div></div>
+          <div class="video"><img src="pusht_causal_student_v10_release_hold_knn7_smoke/videos/pusht_v10_knn_student_ep17.gif" alt="ep17"><div class="v-cap"><strong>episode 17</strong><span>final 2.32 px</span></div></div>
+          <div class="video"><img src="pusht_causal_student_v10_release_hold_knn7_smoke/videos_extra/pusht_v10_knn_student_ep0.gif" alt="ep0"><div class="v-cap"><strong>episode 0</strong><span>final 1.43 px</span></div></div>
+          <div class="video"><img src="pusht_causal_student_v10_release_hold_knn7_smoke/videos_extra2/pusht_v10_knn_student_ep18.gif" alt="ep18"><div class="v-cap"><strong>episode 18</strong><span>final 1.53 px</span></div></div>
+        </div>
+      </div>
+
+      <div>
+        <h3 style="margin: 0 0 4px; font-size: 17px; font-weight: 600; color: var(--ink);">Reacher · arm control</h3>
+        <div style="font-size: 11px; color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700; margin: 10px 0 8px;">Causal scenarios · true-env causal tree (4 / 4 success · median 0.00369)</div>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+          <div class="video"><img src="reacher_true_env_causal_tree/videos/reacher_causal_tree_base.gif" alt="base"><div class="v-cap"><strong>base</strong><span>seed 0, final 0.0031</span></div></div>
+          <div class="video"><img src="reacher_true_env_causal_tree/videos/reacher_causal_tree_offset.gif" alt="offset"><div class="v-cap"><strong>offset</strong><span>seed 1, final 0.0036</span></div></div>
+          <div class="video"><img src="reacher_true_env_causal_tree/videos/reacher_causal_tree_wide.gif" alt="wide"><div class="v-cap"><strong>wide</strong><span>seed 4, final 0.0040</span></div></div>
+          <div class="video"><img src="reacher_true_env_causal_tree/videos/reacher_causal_tree_hard.gif" alt="hard"><div class="v-cap"><strong>hard</strong><span>seed 7, final 0.0038</span></div></div>
+        </div>
+        <div style="font-size: 11px; color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700; margin: 16px 0 8px;">Reaction scenarios · student v2 (4 / 4 success across train + val seeds)</div>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+          <div class="video"><img src="reacher_causal_student_v2_smoke/videos/reacher_reaction_v2_val_seed4.gif" alt="val_seed4"><div class="v-cap"><strong>val seed 4</strong><span>final 0.0060</span></div></div>
+          <div class="video"><img src="reacher_causal_student_v2_smoke/videos/reacher_reaction_v2_val_seed5.gif" alt="val_seed5"><div class="v-cap"><strong>val seed 5</strong><span>final 0.0039</span></div></div>
+          <div class="video"><img src="reacher_causal_student_v2_smoke/videos/reacher_reaction_v2_train_seed0.gif" alt="train_seed0"><div class="v-cap"><strong>train seed 0</strong><span>final 0.0066</span></div></div>
+          <div class="video"><img src="reacher_causal_student_v2_smoke/videos/reacher_reaction_v2_train_seed1.gif" alt="train_seed1"><div class="v-cap"><strong>train seed 1</strong><span>final 0.0064</span></div></div>
+        </div>
+      </div>
+
+      <div>
+        <h3 style="margin: 0 0 4px; font-size: 17px; font-weight: 600; color: var(--ink);">OGBench Cube · pick &amp; place</h3>
+        <div style="font-size: 11px; color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700; margin: 10px 0 8px;">Causal scenarios · neural causal scorer rollout (val_acc 0.9963 · 60 / 60 selected)</div>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+          <div class="video"><img src="ogbench_cube_grasp_neural_causal_scorer/videos/ogcube_base.gif" alt="base"><div class="v-cap"><strong>base</strong><span>standard start</span></div></div>
+          <div class="video"><img src="ogbench_cube_grasp_neural_causal_scorer/videos/ogcube_hard_start.gif" alt="hard_start"><div class="v-cap"><strong>hard_start</strong><span>difficult initial pose</span></div></div>
+          <div class="video"><img src="ogbench_cube_grasp_neural_causal_scorer/videos/ogcube_high_goal.gif" alt="high_goal"><div class="v-cap"><strong>high_goal</strong><span>high target</span></div></div>
+          <div class="video"><img src="ogbench_cube_grasp_neural_causal_scorer/videos/ogcube_side_goal.gif" alt="side_goal"><div class="v-cap"><strong>side_goal</strong><span>side target</span></div></div>
+        </div>
+        <div style="font-size: 11px; color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700; margin: 16px 0 8px;">Reaction scenarios · student v2 (4 / 4 success across goals · sub-cm precision)</div>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+          <div class="video"><img src="ogbench_cube_causal_student_v2_smoke/videos/ogcube_reaction_v2_base.gif" alt="base"><div class="v-cap"><strong>base</strong><span>final 0.0130</span></div></div>
+          <div class="video"><img src="ogbench_cube_causal_student_v2_smoke/videos/ogcube_reaction_v2_high_goal.gif" alt="high_goal"><div class="v-cap"><strong>high_goal</strong><span>final 0.0037</span></div></div>
+          <div class="video"><img src="ogbench_cube_causal_student_v2_smoke/videos/ogcube_reaction_v2_side_goal.gif" alt="side_goal"><div class="v-cap"><strong>side_goal</strong><span>final 0.0031</span></div></div>
+          <div class="video"><img src="ogbench_cube_causal_student_v2_smoke/videos/ogcube_reaction_v2_hard_start.gif" alt="hard_start"><div class="v-cap"><strong>hard_start</strong><span>final 0.0042</span></div></div>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="margin-top: 56px;">
+      <div class="eyebrow">Verified Numbers</div>
+      <h2 style="font-size: 26px; margin-bottom: 20px;">Every figure is from a persisted local artifact.</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Task</th>
+              <th>Causal / Scorer</th>
+              <th>Reaction</th>
+              <th>Train Samples</th>
+              <th>Device</th>
+              <th>Wall-clock</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>TwoRoom</strong></td>
+              <td><span class="ok">79/80</span> &nbsp; val_acc 0.9990</td>
+              <td><span class="ok">80/80</span> &nbsp; heldout</td>
+              <td>49,920 scorer samples</td>
+              <td>M1 Max · MLX</td>
+              <td>~48 s</td>
+            </tr>
+            <tr>
+              <td><strong>PushT</strong></td>
+              <td><span class="ok">4/4</span> &nbsp; pose-aware guard</td>
+              <td><span class="ok">2/2</span> &nbsp; success_rate 1.0</td>
+              <td>1,010 train · 315 val</td>
+              <td>M1 Max · MLX</td>
+              <td>~56 s + ~112 s</td>
+            </tr>
+            <tr>
+              <td><strong>Reacher</strong></td>
+              <td><span class="ok">4/4</span> &nbsp; median 0.00369</td>
+              <td><span class="ok">2/2</span> &nbsp; mean 0.00494</td>
+              <td>288 train · 144 val</td>
+              <td>M1 Max · MLX</td>
+              <td>~minutes</td>
+            </tr>
+            <tr>
+              <td><strong>OGBench Cube</strong></td>
+              <td><span class="ok">60/60</span> &nbsp; val_acc 0.9963</td>
+              <td><span class="ok">4/4</span> &nbsp; phase-conditioned</td>
+              <td>35,200 scorer samples</td>
+              <td>M1 Max · MLX</td>
+              <td>~25 s</td>
+            </tr>
+            <tr>
+              <td><strong>OGBench v1 — 4 families</strong></td>
+              <td colspan="2"><span class="ok">8/8 each</span> &nbsp; Cube · PointMaze · Scene · Puzzle</td>
+              <td>443 – 2,724 / family</td>
+              <td>M1 Max · MLX</td>
+              <td>per family &lt; 60 s</td>
+            </tr>
+          </tbody>
+        </table>
+        <p style="font-size: 13px; color: var(--muted); margin-top: 10px; line-height: 1.55;">All training and inference on a single Apple M1 Max (64 GB unified memory) via MLX. No discrete GPU. No cloud compute. Wall-clock numbers reconstructed from local session timestamps and checkpoint mtimes; v0.0.3 will instrument wall-clock natively.</p>
+      </div>
+
+      <div style="margin-top: 44px;">
+        <div class="eyebrow">Convergence</div>
+        <h2 style="font-size: 26px; margin-bottom: 8px;">How fast the scorer actually trains.</h2>
+        <p style="font-size: 14px; color: var(--muted); margin: 0 0 18px;">Pulled from local <code>metrics.json</code> checkpoints. Solid lines = val_acc; dashed = selected_success_rate. Cube scorer leaps from 6.7% selected success at iter 0 to 98.3% by iter 200.</p>
+        <div style="background: #fdfaf3; border: 1px solid var(--line); border-radius: 4px; padding: 24px 16px;">
+          <svg viewBox="0 0 720 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">
+            <line x1="70" y1="40" x2="70" y2="260" stroke="#0e0e0e" stroke-width="1"/>
+            <line x1="70" y1="260" x2="690" y2="260" stroke="#0e0e0e" stroke-width="1"/>
+            <line x1="70" y1="216" x2="690" y2="216" stroke="#eee"/>
+            <text x="62" y="220" text-anchor="end" font-family="SF Mono, monospace" font-size="10" fill="#666">0.2</text>
+            <line x1="70" y1="172" x2="690" y2="172" stroke="#eee"/>
+            <text x="62" y="176" text-anchor="end" font-family="SF Mono, monospace" font-size="10" fill="#666">0.4</text>
+            <line x1="70" y1="128" x2="690" y2="128" stroke="#eee"/>
+            <text x="62" y="132" text-anchor="end" font-family="SF Mono, monospace" font-size="10" fill="#666">0.6</text>
+            <line x1="70" y1="84" x2="690" y2="84" stroke="#eee"/>
+            <text x="62" y="88" text-anchor="end" font-family="SF Mono, monospace" font-size="10" fill="#666">0.8</text>
+            <line x1="70" y1="40" x2="690" y2="40" stroke="#eee"/>
+            <text x="62" y="44" text-anchor="end" font-family="SF Mono, monospace" font-size="10" fill="#666">1.0</text>
+            <text x="62" y="263" text-anchor="end" font-family="SF Mono, monospace" font-size="10" fill="#666">0.0</text>
+            <text x="70" y="276" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#666">0</text>
+            <text x="208" y="276" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#666">400</text>
+            <text x="346" y="276" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#666">800</text>
+            <text x="483" y="276" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#666">1200</text>
+            <text x="621" y="276" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#666">1600</text>
+            <text x="380" y="298" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="11" fill="#666">scorer iteration</text>
+            <text x="22" y="150" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="11" fill="#666" transform="rotate(-90 22 150)">metric value (0–1)</text>
+            <polyline points="70,60 139,45 208,42 277,42 345,42 414,41 483,40 552,41 621,41 689,40" fill="none" stroke="#0e0e0e" stroke-width="2"/>
+            <polyline points="70,73 139,59 208,40 277,40 345,40 414,40 483,40 552,40 621,40 689,43" fill="none" stroke="#0e0e0e" stroke-width="1.5" stroke-dasharray="5,3"/>
+            <polyline points="70,128 139,53 208,41 277,42 345,41 414,41 483,42 552,41" fill="none" stroke="#c4502b" stroke-width="2"/>
+            <polyline points="70,245 139,44 208,40 277,40 345,40 414,40 483,40 552,40" fill="none" stroke="#c4502b" stroke-width="1.5" stroke-dasharray="5,3"/>
+            <g fill="#0e0e0e">
+              <circle cx="70" cy="60" r="2.5"/><circle cx="139" cy="45" r="2.5"/><circle cx="208" cy="42" r="2.5"/>
+              <circle cx="277" cy="42" r="2.5"/><circle cx="345" cy="42" r="2.5"/><circle cx="414" cy="41" r="2.5"/>
+              <circle cx="483" cy="40" r="2.5"/><circle cx="552" cy="41" r="2.5"/><circle cx="621" cy="41" r="2.5"/>
+              <circle cx="689" cy="40" r="2.5"/>
+            </g>
+            <g fill="#c4502b">
+              <circle cx="70" cy="128" r="2.5"/><circle cx="139" cy="53" r="2.5"/><circle cx="208" cy="41" r="2.5"/>
+              <circle cx="277" cy="42" r="2.5"/><circle cx="345" cy="41" r="2.5"/><circle cx="414" cy="41" r="2.5"/>
+              <circle cx="483" cy="42" r="2.5"/><circle cx="552" cy="41" r="2.5"/>
+            </g>
+            <rect x="488" y="50" width="195" height="78" fill="#fff" stroke="#ddd" stroke-width="0.5" opacity="0.96"/>
+            <line x1="498" y1="62" x2="523" y2="62" stroke="#0e0e0e" stroke-width="2"/>
+            <text x="528" y="66" font-family="-apple-system, Inter, sans-serif" font-size="10" fill="#0e0e0e">TwoRoom val_acc</text>
+            <line x1="498" y1="78" x2="523" y2="78" stroke="#0e0e0e" stroke-width="1.5" stroke-dasharray="5,3"/>
+            <text x="528" y="82" font-family="-apple-system, Inter, sans-serif" font-size="10" fill="#0e0e0e">TwoRoom selected_succ</text>
+            <line x1="498" y1="94" x2="523" y2="94" stroke="#c4502b" stroke-width="2"/>
+            <text x="528" y="98" font-family="-apple-system, Inter, sans-serif" font-size="10" fill="#c4502b">Cube val_acc</text>
+            <line x1="498" y1="110" x2="523" y2="110" stroke="#c4502b" stroke-width="1.5" stroke-dasharray="5,3"/>
+            <text x="528" y="114" font-family="-apple-system, Inter, sans-serif" font-size="10" fill="#c4502b">Cube selected_succ</text>
+          </svg>
+        </div>
+        <p style="font-size: 12px; color: var(--muted); margin-top: 10px; line-height: 1.55; font-style: italic;"><b>Figure 3.</b> Scorer convergence on Apple M1 Max. Final val_acc: TwoRoom 0.9990 (iter 1,799 · ~48 s wall-clock); Cube 0.9963 (iter 1,399 · ~25 s wall-clock). Source: <code>metrics.json</code> per checkpoint.</p>
+      </div>
+
+      <div style="margin-top: 44px;">
+        <div class="eyebrow">Industry Context</div>
+        <h2 style="font-size: 26px; margin-bottom: 8px;">What does this cost compared to how the rest of the field trains policies?</h2>
+        <p style="font-size: 14px; color: var(--muted); margin: 0 0 18px;">Apples-to-apples on the cost / time / friction axis (not on ML capability — task scope is intentionally narrow: spec-driven calibration, not general visuomotor policy).</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Cost axis</th>
+                <th>Industry norm</th>
+                <th>Meadow (M1 Max + MLX)</th>
+                <th>Ratio</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Scorer / policy training time</strong></td>
+                <td>Hours to days on cloud GPU<br><span style="font-size:12px;color:var(--muted);">Diffusion Policy: hours · π0 / VLA: days · LeWM: ~few hours</span></td>
+                <td>25–60 s on consumer laptop</td>
+                <td><span class="ok">100×–1000×</span> faster wall-clock</td>
+              </tr>
+              <tr>
+                <td><strong>Compute cost per training cycle</strong></td>
+                <td>$5 – $50 cloud GPU rental (single-GPU hours)</td>
+                <td>&lt; $0.01 electricity (laptop)</td>
+                <td><span class="ok">500×–5000×</span> cheaper per cycle</td>
+              </tr>
+              <tr>
+                <td><strong>Operator time per drift event</strong></td>
+                <td>~4 hours sensor-log analysis + manual retune</td>
+                <td>~60 s laptop click</td>
+                <td><span class="ok">240×</span> operator productivity</td>
+              </tr>
+              <tr>
+                <td><strong>Wafer / IP data exposure</strong></td>
+                <td>Sent to cloud (procurement gate for fabs)</td>
+                <td>Stays on customer's local laptop</td>
+                <td><span class="ok">Binary</span> — clears fab IT-security review</td>
+              </tr>
+            </tbody>
+          </table>
+          <p style="font-size: 12px; color: var(--muted); margin-top: 10px; line-height: 1.55; font-style: italic;">Industry-norm ranges are public-domain order-of-magnitude figures; Meadow numbers are measured on this machine. We are not claiming superior ML capability — the comparison is on customer-facing cost and friction.</p>
+        </div>
+
+        <div style="margin-top: 44px;">
+          <div class="eyebrow">Visualized · Wall-clock Comparison</div>
+          <h2 style="font-size: 26px; margin-bottom: 8px;">From 1 minute to 1 day — visualized.</h2>
+          <p style="font-size: 14px; color: var(--muted); margin: 0 0 18px;">X-axis: log-scale wall-clock. Y-axis: peak success / val_acc. <strong style="color: #c4502b;">Filled orange</strong> = Meadow's measured points on M1 Max + MLX. <strong style="color: #666;">Hollow grey</strong> = inferred industry positions.</p>
+          <div style="background: #fdfaf3; border: 1px solid var(--line); border-radius: 4px; padding: 24px 16px;">
+            <svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">
+              <line x1="80" y1="40" x2="80" y2="280" stroke="#0e0e0e" stroke-width="1"/>
+              <line x1="80" y1="280" x2="730" y2="280" stroke="#0e0e0e" stroke-width="1"/>
+              <line x1="80" y1="40" x2="730" y2="40" stroke="#eee"/>
+              <text x="72" y="44" text-anchor="end" font-family="SF Mono, monospace" font-size="10" fill="#666">1.0</text>
+              <line x1="80" y1="100" x2="730" y2="100" stroke="#eee"/>
+              <text x="72" y="104" text-anchor="end" font-family="SF Mono, monospace" font-size="10" fill="#666">0.75</text>
+              <line x1="80" y1="160" x2="730" y2="160" stroke="#eee"/>
+              <text x="72" y="164" text-anchor="end" font-family="SF Mono, monospace" font-size="10" fill="#666">0.50</text>
+              <line x1="80" y1="220" x2="730" y2="220" stroke="#eee"/>
+              <text x="72" y="224" text-anchor="end" font-family="SF Mono, monospace" font-size="10" fill="#666">0.25</text>
+              <text x="72" y="283" text-anchor="end" font-family="SF Mono, monospace" font-size="10" fill="#666">0.0</text>
+              <text x="80" y="296" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#666">1s</text>
+              <text x="188" y="296" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#666">10s</text>
+              <text x="273" y="296" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#666">1m</text>
+              <text x="369" y="296" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#666">10m</text>
+              <text x="465" y="296" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#666">1h</text>
+              <text x="615" y="296" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#666">1d</text>
+              <text x="706" y="296" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#666">1w</text>
+              <line x1="273" y1="40" x2="273" y2="280" stroke="#ddd" stroke-dasharray="2,3"/>
+              <line x1="465" y1="40" x2="465" y2="280" stroke="#ddd" stroke-dasharray="2,3"/>
+              <line x1="615" y1="40" x2="615" y2="280" stroke="#ddd" stroke-dasharray="2,3"/>
+              <line x1="706" y1="40" x2="706" y2="280" stroke="#ddd" stroke-dasharray="2,3"/>
+              <text x="22" y="160" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="11" fill="#666" transform="rotate(-90 22 160)">peak success / val_acc</text>
+              <text x="405" y="320" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="11" fill="#666">training wall-clock (log scale)</text>
+
+              <circle cx="484" cy="58" r="6" fill="#fff" stroke="#666" stroke-width="1.6"/>
+              <line x1="484" y1="58" x2="484" y2="80" stroke="#999" stroke-dasharray="2,2"/>
+              <text x="484" y="92" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#666">Diffusion Policy</text>
+              <text x="484" y="104" text-anchor="middle" font-family="SF Mono, monospace" font-size="9" fill="#888">~1.5 h, single GPU</text>
+
+              <circle cx="517" cy="52" r="6" fill="#fff" stroke="#666" stroke-width="1.6"/>
+              <line x1="517" y1="52" x2="572" y2="138" stroke="#999" stroke-dasharray="2,2"/>
+              <text x="572" y="148" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#666">LeWM</text>
+              <text x="572" y="160" text-anchor="middle" font-family="SF Mono, monospace" font-size="9" fill="#888">~3 h, single GPU</text>
+
+              <circle cx="647" cy="69" r="6" fill="#fff" stroke="#666" stroke-width="1.6"/>
+              <line x1="647" y1="69" x2="647" y2="100" stroke="#999" stroke-dasharray="2,2"/>
+              <text x="647" y="112" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#666">π0 / VLA</text>
+              <text x="647" y="124" text-anchor="middle" font-family="SF Mono, monospace" font-size="9" fill="#888">~days, multi-GPU</text>
+
+              <line x1="232" y1="41" x2="273" y2="40" stroke="#c4502b" stroke-width="2" opacity="0.5"/>
+              <circle cx="232" cy="41" r="7" fill="#c4502b"/>
+              <line x1="232" y1="41" x2="180" y2="180" stroke="#c4502b" stroke-dasharray="2,2"/>
+              <text x="180" y="194" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#c4502b" font-weight="700">Meadow · Cube scorer</text>
+              <text x="180" y="206" text-anchor="middle" font-family="SF Mono, monospace" font-size="9" fill="#c4502b">25 s on M1 Max</text>
+
+              <circle cx="273" cy="40" r="7" fill="#c4502b"/>
+              <line x1="273" y1="40" x2="350" y2="180" stroke="#c4502b" stroke-dasharray="2,2"/>
+              <text x="350" y="194" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" fill="#c4502b" font-weight="700">Meadow · TwoRoom scorer</text>
+              <text x="350" y="206" text-anchor="middle" font-family="SF Mono, monospace" font-size="9" fill="#c4502b">60 s on M1 Max</text>
+
+              <path d="M 273 245 L 615 245" stroke="#c4502b" stroke-width="1.5" opacity="0.5"/>
+              <path d="M 273 240 L 273 250" stroke="#c4502b" stroke-width="1.5" opacity="0.5"/>
+              <path d="M 615 240 L 615 250" stroke="#c4502b" stroke-width="1.5" opacity="0.5"/>
+              <text x="444" y="262" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="11" fill="#c4502b" font-style="italic">~1,400× wall-clock gap, from 1 minute to 1 day</text>
+            </svg>
+          </div>
+          <p style="font-size: 12px; color: var(--muted); margin-top: 10px; line-height: 1.55; font-style: italic;"><b>Figure 4.</b> Same data as the Industry Context table, visualized on a log-time axis. Hollow markers are inferred from public sources (papers / project pages); see Figure 5 for source verification matrix. Task contracts differ across systems — this is not a head-to-head ML benchmark; it visualizes the deployment-surface gap.</p>
+        </div>
+
+        <div style="margin-top: 44px;">
+          <div class="eyebrow">Transparency &amp; Due Diligence</div>
+          <h2 style="font-size: 26px; margin-bottom: 8px;">We publish what most of the field declines to.</h2>
+          <p style="font-size: 14px; color: var(--muted); margin: 0 0 18px;">Direct fetch of public pages (April 2026). Across 5 metrics that any robotics buyer would ask in due diligence, Meadow is the only system in this comparison set with all five published.</p>
+
+          <div style="background: #fdfaf3; border: 1px solid var(--line); border-radius: 4px; padding: 24px 16px;">
+            <svg viewBox="0 0 760 380" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">
+              <text x="380" y="22" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="12" fill="#0e0e0e" font-weight="700">Public training-metric transparency · 5 systems × 5 axes</text>
+
+              <text x="220" y="62" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" font-weight="700" fill="#0e0e0e">Wall-clock</text>
+              <text x="320" y="62" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" font-weight="700" fill="#0e0e0e">GPU spec</text>
+              <text x="420" y="62" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" font-weight="700" fill="#0e0e0e">Sample count</text>
+              <text x="520" y="62" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" font-weight="700" fill="#0e0e0e">Success rate</text>
+              <text x="620" y="62" text-anchor="middle" font-family="SF Mono, monospace" font-size="10" font-weight="700" fill="#0e0e0e">Inference latency</text>
+
+              <line x1="170" y1="72" x2="670" y2="72" stroke="#0e0e0e" stroke-width="0.8"/>
+
+              <!-- Row 1: Meadow -->
+              <text x="160" y="106" text-anchor="end" font-family="-apple-system, Inter, sans-serif" font-size="13" font-weight="700" fill="#c4502b">Meadow v0.0.2</text>
+              <text x="160" y="120" text-anchor="end" font-family="SF Mono, monospace" font-size="9" fill="#888">(this work)</text>
+              <rect x="175" y="86" width="90" height="40" fill="#c4502b" stroke="#c4502b"/>
+              <text x="220" y="111" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="14" font-weight="700" fill="#fff">✓</text>
+              <rect x="275" y="86" width="90" height="40" fill="#c4502b" stroke="#c4502b"/>
+              <text x="320" y="111" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="14" font-weight="700" fill="#fff">✓</text>
+              <rect x="375" y="86" width="90" height="40" fill="#c4502b" stroke="#c4502b"/>
+              <text x="420" y="111" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="14" font-weight="700" fill="#fff">✓</text>
+              <rect x="475" y="86" width="90" height="40" fill="#c4502b" stroke="#c4502b"/>
+              <text x="520" y="111" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="14" font-weight="700" fill="#fff">✓</text>
+              <rect x="575" y="86" width="90" height="40" fill="#c4502b" stroke="#c4502b"/>
+              <text x="620" y="111" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="14" font-weight="700" fill="#fff">✓</text>
+
+              <!-- Row 2: LeWM -->
+              <text x="160" y="156" text-anchor="end" font-family="-apple-system, Inter, sans-serif" font-size="13" fill="#444">LeWM</text>
+              <text x="160" y="170" text-anchor="end" font-family="SF Mono, monospace" font-size="9" fill="#888">le-wm.github.io</text>
+              <rect x="175" y="136" width="90" height="40" fill="#fafaf6" stroke="#bbb"/>
+              <text x="220" y="161" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="11" fill="#999" font-style="italic">~ vague</text>
+              <rect x="275" y="136" width="90" height="40" fill="#fafaf6" stroke="#bbb"/>
+              <text x="320" y="161" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="11" fill="#999" font-style="italic">~ vague</text>
+              <rect x="375" y="136" width="90" height="40" fill="#ffffff" stroke="#ccc" stroke-dasharray="3,2"/>
+              <text x="420" y="161" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="14" fill="#bbb">—</text>
+              <rect x="475" y="136" width="90" height="40" fill="#ffffff" stroke="#ccc" stroke-dasharray="3,2"/>
+              <text x="520" y="161" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="14" fill="#bbb">—</text>
+              <rect x="575" y="136" width="90" height="40" fill="#fafaf6" stroke="#bbb"/>
+              <text x="620" y="161" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="11" fill="#999" font-style="italic">~ relative</text>
+
+              <!-- Row 3: Diffusion Policy -->
+              <text x="160" y="206" text-anchor="end" font-family="-apple-system, Inter, sans-serif" font-size="13" fill="#444">Diffusion Policy</text>
+              <text x="160" y="220" text-anchor="end" font-family="SF Mono, monospace" font-size="9" fill="#888">Columbia / Toyota</text>
+              <rect x="175" y="186" width="90" height="40" fill="#ffffff" stroke="#ccc" stroke-dasharray="3,2"/>
+              <text x="220" y="211" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="14" fill="#bbb">—</text>
+              <rect x="275" y="186" width="90" height="40" fill="#ffffff" stroke="#ccc" stroke-dasharray="3,2"/>
+              <text x="320" y="211" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="14" fill="#bbb">—</text>
+              <rect x="375" y="186" width="90" height="40" fill="#ffffff" stroke="#ccc" stroke-dasharray="3,2"/>
+              <text x="420" y="211" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="14" fill="#bbb">—</text>
+              <rect x="475" y="186" width="90" height="40" fill="#fafaf6" stroke="#bbb"/>
+              <text x="520" y="211" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="11" fill="#999" font-style="italic">~ relative</text>
+              <rect x="575" y="186" width="90" height="40" fill="#ffffff" stroke="#ccc" stroke-dasharray="3,2"/>
+              <text x="620" y="211" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="14" fill="#bbb">—</text>
+
+              <!-- Row 4: π0 / Physical Intelligence -->
+              <text x="160" y="256" text-anchor="end" font-family="-apple-system, Inter, sans-serif" font-size="13" fill="#444">π0 / Physical Intelligence</text>
+              <text x="160" y="270" text-anchor="end" font-family="SF Mono, monospace" font-size="9" fill="#888">pi.website/blog/openpi</text>
+              <rect x="175" y="236" width="90" height="40" fill="#ffffff" stroke="#ccc" stroke-dasharray="3,2"/>
+              <text x="220" y="261" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="14" fill="#bbb">—</text>
+              <rect x="275" y="236" width="90" height="40" fill="#ffffff" stroke="#ccc" stroke-dasharray="3,2"/>
+              <text x="320" y="261" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="14" fill="#bbb">—</text>
+              <rect x="375" y="236" width="90" height="40" fill="#fafaf6" stroke="#bbb"/>
+              <text x="420" y="261" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="11" fill="#999" font-style="italic">~ vague</text>
+              <rect x="475" y="236" width="90" height="40" fill="#ffffff" stroke="#ccc" stroke-dasharray="3,2"/>
+              <text x="520" y="261" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="14" fill="#bbb">—</text>
+              <rect x="575" y="236" width="90" height="40" fill="#fafaf6" stroke="#bbb"/>
+              <text x="620" y="261" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="11" fill="#999" font-style="italic">~ relative</text>
+
+              <!-- Row 5: Unitree -->
+              <text x="160" y="306" text-anchor="end" font-family="-apple-system, Inter, sans-serif" font-size="13" fill="#444">Unitree (humanoid + quad)</text>
+              <text x="160" y="320" text-anchor="end" font-family="SF Mono, monospace" font-size="9" fill="#888">unitreerobotics/unitree_rl_gym</text>
+              <rect x="175" y="286" width="90" height="40" fill="#ffffff" stroke="#ccc" stroke-dasharray="3,2"/>
+              <text x="220" y="311" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="14" fill="#bbb">—</text>
+              <rect x="275" y="286" width="90" height="40" fill="#ffffff" stroke="#ccc" stroke-dasharray="3,2"/>
+              <text x="320" y="311" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="14" fill="#bbb">—</text>
+              <rect x="375" y="286" width="90" height="40" fill="#ffffff" stroke="#ccc" stroke-dasharray="3,2"/>
+              <text x="420" y="311" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="14" fill="#bbb">—</text>
+              <rect x="475" y="286" width="90" height="40" fill="#ffffff" stroke="#ccc" stroke-dasharray="3,2"/>
+              <text x="520" y="311" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="14" fill="#bbb">—</text>
+              <rect x="575" y="286" width="90" height="40" fill="#ffffff" stroke="#ccc" stroke-dasharray="3,2"/>
+              <text x="620" y="311" text-anchor="middle" font-family="-apple-system, Inter, sans-serif" font-size="14" fill="#bbb">—</text>
+
+              <!-- Legend -->
+              <rect x="170" y="346" width="14" height="14" fill="#c4502b" stroke="#c4502b"/>
+              <text x="190" y="357" font-family="-apple-system, Inter, sans-serif" font-size="11" fill="#444">precise number published</text>
+              <rect x="350" y="346" width="14" height="14" fill="#fafaf6" stroke="#bbb"/>
+              <text x="370" y="357" font-family="-apple-system, Inter, sans-serif" font-size="11" fill="#444">vague / relative only</text>
+              <rect x="510" y="346" width="14" height="14" fill="#ffffff" stroke="#ccc" stroke-dasharray="3,2"/>
+              <text x="530" y="357" font-family="-apple-system, Inter, sans-serif" font-size="11" fill="#444">not published (verified by direct fetch)</text>
+            </svg>
+          </div>
+          <p style="font-size: 12px; color: var(--muted); margin-top: 10px; line-height: 1.55; font-style: italic;"><b>Figure 5.</b> Source: direct fetch of each system's public page (April 2026, reproducible). Business reasons for non-disclosure are reasonable; this matrix is not an accusation. The point is procurement-relevant: a customer doing due diligence on Meadow can verify every number above; doing the same comparison on the other systems requires inference from indirect signals.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="wedge">
+  <div class="container">
+    <div class="eyebrow">Wedge Market</div>
+    <h2>Semiconductor equipment calibration. Highest pain, highest willingness to pay.</h2>
+    <p>A single EUV lithography tool costs $200M+. One hour of unplanned downtime burns hundreds of thousands of dollars. Operators currently diagnose chamber drift by reading sensor logs, tweaking parameters, and re-running test wafers — typically four hours per drift event.</p>
+    <p>Fabs already track named physical parameters: chamber pressure, laser drift, alignment offset. Meadow's spec-driven calibration loop maps directly onto their existing data structures with no paradigm shift required.</p>
+    <p>Founder is in Taiwan, within an hour's reach of the major fabs and their tier-1 equipment suppliers — a physical access advantage that overseas competitors do not have for early customer discovery and pilots. We do not name specific buyers in this public document.</p>
+    <p>Quantified value:<strong> 60 seconds of laptop time can replace 4 hours of operator analysis</strong> — roughly two orders of magnitude in operator productivity per drift event. Critically, all calibration happens on the engineer's local laptop; no wafer or proprietary data leaves the fab perimeter — which removes a real procurement blocker for IT security review.</p>
+    <p class="pull">Beachhead: design partners in the wedge vertical. Expansion: industrial robot integrators, scenario testing for autonomy, surgical robotics — the same approach generalizes once the first vertical is anchored.</p>
+  </div>
+</section>
+
+<section id="qa">
+  <div class="container">
+    <div class="eyebrow">Frequently Asked</div>
+    <h2>Seven questions, direct answers.</h2>
+    <p style="margin-bottom: 20px;">Common questions from researchers, investors, and partners — answered with the level of detail appropriate to a public document. Deeper specifics are shared individually.</p>
+
+    <div class="qa-list">
+
+      <div class="qa-item">
+        <div class="qid">Q1</div>
+        <h3>What does Meadow do?</h3>
+        <p>Meadow turns custom robot deployments into 5-minute spec changes — replacing weeks of demonstration collection and engineer tuning. Engineers describe the robot and goal in a typed, named specification; the system produces a deployable, sub-millisecond reaction policy that runs on the customer's local hardware. When the real world drifts, the system localizes <em>which</em> physical parameter has moved and corrects locally, without retraining the whole policy.</p>
+      </div>
+
+      <div class="qa-item">
+        <div class="qid">Q2</div>
+        <h3>Why is this the right team?</h3>
+        <p>Sheng-Kai Huang. Background in physics and ML systems. Years of work at the boundary between data-driven prediction and causal physical reasoning — the exact gap Meadow is built around.</p>
+        <p>Built and shipped four verified showcases solo, plus four standardized benchmark families through a single pipeline, with reproducible artefacts. Comfortable across the device-side Apple Silicon ML stack and adjacent simulation tooling.</p>
+        <p>Solo founder by design at this stage: fast iteration, single decision-maker. Open to a strong commercial co-founder where the strategic fit is right.</p>
+      </div>
+
+      <div class="qa-item">
+        <div class="qid">Q3</div>
+        <h3>What's special about the approach?</h3>
+        <ul class="plain">
+          <li><strong>Physical-first inputs.</strong> The system starts from named physical state, not pixels — the same starting point biological intelligence uses (vestibular, proprioceptive, contact signals before vision).</li>
+          <li><strong>Sub-minute training on a consumer laptop.</strong> Trains in under 60 seconds on Apple Silicon — no discrete GPU, no cloud. A field engineer can recalibrate on her own machine during a coffee break.</li>
+          <li><strong>Named-variable calibration.</strong> When a deployed policy drifts, we identify <em>which</em> physical parameter has moved — not opaque concept drift — and correct that one quantity locally.</li>
+          <li><strong>Reproducibility as a first-class feature.</strong> Every metric in this document is verifiable from the public artefacts on this page; that level of disclosure is rare in the field today (see Figure 5).</li>
+        </ul>
+      </div>
+
+      <div class="qa-item">
+        <div class="qid">Q4</div>
+        <h3>How far along are you?</h3>
+        <p>Product (v0.0.2 shipped, all on a single Apple M1 Max + MLX):</p>
+        <ul class="plain">
+          <li>4 showcase tasks with persisted artifacts (TwoRoom, PushT, Reacher, OGBench Cube)</li>
+          <li>4 OGBench v1 families through one pipeline (8/8 each, 443–2,724 samples / family)</li>
+          <li>Sub-pixel reaction precision on PushT (0.81 px final block error)</li>
+          <li>Reaction inference 0.095–0.122 ms (Core ML, CPU+GPU benchmarked optimal for &lt; 2 MB policies)</li>
+          <li>Deployable artifact size 0.077–2.04 MB</li>
+          <li><strong>Scorer training wall-clock:</strong> ~48 s (TwoRoom, 1,799 iter) · ~25 s (Cube, 1,399 iter) — on consumer M1 Max chip, no cloud GPU</li>
+          <li><strong>Reaction distillation wall-clock:</strong> ~112 s (PushT student v10) on the same chip</li>
+        </ul>
+        <p>Customers: pre-revenue. Customer discovery interviews with semiconductor equipment engineers in Taiwan in progress. Goal: first paid pilot within 6 months of batch start.</p>
+        <p>Capital: bootstrapped. No outside investment.</p>
+      </div>
+
+      <div class="qa-item">
+        <div class="qid">Q5</div>
+        <h3>Who else is doing this?</h3>
+        <ul class="plain">
+          <li><strong>Diffusion Policy</strong> (Columbia / Toyota): visuomotor diffusion. Strong on demo-rich tasks. No calibration loop. Demo-collection bottleneck.</li>
+          <li><strong>π0 / Physical Intelligence</strong>: VLA on millions of demonstrations. Impressive demos. Capex-heavy data collection.</li>
+          <li><strong>Skild AI</strong>: foundation model for robotics. $300M raised, pre-revenue. Different bet — scale of demonstrations.</li>
+          <li><strong>Traditional PLC</strong> (Siemens, Rockwell): manual tuning, no learning.</li>
+          <li><strong>Applied Intuition</strong>: simulation for autonomous driving. Adjacent, not direct.</li>
+          <li><strong>LeWM / AMI Labs</strong>: pixel JEPA world models. Different stack layer (perception); can be plugged upstream of Meadow.</li>
+        </ul>
+        <p>Meadow occupies a clean gap: spec-driven, demo-light, calibration-native.</p>
+      </div>
+
+      <div class="qa-item">
+        <div class="qid">Q6</div>
+        <h3>How does the business work?</h3>
+        <p>B2B, two streams:</p>
+        <ul class="plain">
+          <li><strong>Per-deployment licensing</strong> — replacing 2+ weeks of integrator engineering at meaningfully higher cost. Pricing on enquiry.</li>
+          <li><strong>Calibration SaaS</strong> — ongoing on-device drift correction and policy refresh. Runs on the customer's local laptop, not on our cloud — proprietary data never leaves the customer perimeter, which removes a real procurement blocker for security-sensitive industries.</li>
+        </ul>
+        <p>Pilot-level economics scale with the buyer's measurable willingness to pay (yield improvement, downtime reduction). Specifics shared in evaluation conversations under appropriate confidentiality.</p>
+      </div>
+
+      <div class="qa-item">
+        <div class="qid">Q7</div>
+        <h3>Anything else worth knowing?</h3>
+        <p>Solo founder in Taiwan, currently bootstrapped. Open to relocation, remote collaboration, or co-founder partnership where the strategic fit is right.</p>
+        <p>Multi-modal grounding (combining tactile, proprioceptive, and inertial signals alongside the existing typed inputs) is an active development direction.</p>
+        <p>Long-term: Meadow generalizes from the first vertical to industrial robotics, scenario testing for autonomy, surgical robotics, and broader embodied AI. The wedge is the first vertical, not the ceiling.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="founder">
+  <div class="container">
+    <div class="eyebrow">Founder</div>
+    <h2>Sheng-Kai Huang.</h2>
+    <p>Physics and ML systems background. Years of work at the boundary between predictive modeling and causal physical structure — Meadow operationalizes that boundary for robotics.</p>
+    <p>Industrial robotics is gated by an engineering bottleneck the dominant ML paradigm cannot cleanly solve. Apple Silicon and edge inference now make sub-millisecond deployable policies practical, and an Asia-based founder team has structural access advantages overseas competitors do not.</p>
+    <p>Meadow is the result of two years of iteration on the right factoring of physics, value, and policy. The specific architecture that makes the public outcomes possible is shared in deeper conversations under appropriate confidentiality.</p>
+  </div>
+</section>
+
+<section id="roadmap">
+  <div class="container">
+    <div class="eyebrow">Direction of Development</div>
+    <h2>How the work is intended to unfold.</h2>
+    <div class="timeline">
+      <div class="tl-row">
+        <div class="when">Phase 1</div>
+        <div class="what">Customer discovery in the wedge vertical; a small number of design partners; calibration loop validated on real customer data.</div>
+      </div>
+      <div class="tl-row">
+        <div class="when">Phase 2</div>
+        <div class="what">First paid pilots. Multi-sensor integration in the spec frame. Calibration loop running on real customer hardware.</div>
+      </div>
+      <div class="tl-row">
+        <div class="when">Phase 3</div>
+        <div class="what">Multiple paying customers. Expansion to a second vertical. Multi-modal grounding shipped as a production feature.</div>
+      </div>
+    </div>
+    <p style="font-size: 13px; color: var(--muted); margin-top: 14px; font-style: italic;">Specific timing, customer-facing milestones, and capital plans are discussed individually under appropriate confidentiality.</p>
+  </div>
+</section>
+
+<section id="ask">
+  <div class="container">
+    <div class="eyebrow">Get in Touch</div>
+    <h2>If any of this resonates, we'd like to hear from you.</h2>
+    <p>This document is a public snapshot — deliberately light on architecture and pipeline. The full picture, including the specifics that make the public outcomes possible, is shared in direct conversation under whatever level of confidentiality fits.</p>
+    <div class="ask-list">
+      <div class="ask-item">
+        <h3>Researchers</h3>
+        <p>If your work intersects with grounded action, on-device calibration, or device-side robot learning, we are happy to share more detail and discuss directions where collaboration would be valuable.</p>
+      </div>
+      <div class="ask-item">
+        <h3>Investors</h3>
+        <p>Architecture, pipeline, business model, and capital plan are available under NDA. Reach out for a deeper evaluation conversation.</p>
+      </div>
+      <div class="ask-item">
+        <h3>Partners &amp; Customers</h3>
+        <p>If you operate equipment, robotics, or industrial automation that could benefit from on-device named-variable calibration, we would value a conversation about a possible pilot.</p>
+      </div>
+    </div>
+    <p class="pull">Sheng-Kai Huang · <a href="mailto:akai@fawstudio.com" style="color: #fff; border-bottom: 1px solid rgba(255,255,255,0.4);">akai@fawstudio.com</a> · Taipei, Taiwan</p>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="row">
+      <span>Meadow · YC Application 2026</span>
+      <span>Sheng-Kai Huang · akai@fawstudio.com · <a href="meadow_v002.html">Technical demo</a></span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
