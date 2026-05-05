@@ -1,90 +1,21 @@
 # Meadow WM
+### Physics-Grounded Three-Layer Learning Stack for Robot Control
 
-> Physics-grounded three-layer learning stack for robot control.
+[Sheng-Kai Huang](https://github.com/akaiHuang) · Independent researcher, Taipei
 
-🌐 **Live demo (Cloudflare Pages)**: https://meadow-wm.pages.dev
-📄 **Full report (English)**: [`web/meadow_ami.pdf`](web/meadow_ami.pdf) · [`web/index.html`](web/index.html)
-📄 **完整報告 (繁體中文)**: [`web/meadow_ami_zh.pdf`](web/meadow_ami_zh.pdf) · [`web/index_zh.html`](web/index_zh.html)
+**Abstract:** Modern robot control increasingly couples perception and action into a single pixels-to-actions optimization, leaving physical structure to be recovered by gradient descent over large datasets. We introduce **Meadow**, a three-layer learning stack that factors the problem along physical, statistical, and reactive boundaries: a non-learning physics expansion (Layer 1) that unrolls a causal tree of candidate trajectories under simulator dynamics, a compact neural scorer (Layer 2) trained over the physics-validated branches, and a low-latency reaction policy (Layer 3) distilled from the scorer-selected chain. A named-variable calibration loop closes the system: when deployed behavior diverges from the predicted chain, specific physical parameters are re-estimated locally and the affected layer is re-distilled — without full retraining or new demonstrations. Across four representative tasks (TwoRoom, PushT, Reacher, OGBench Cube) the same expansion–scorer–reaction pipeline reaches 100% heldout success, including 0.81 px sub-pixel reaction precision on PushT contact manipulation. The OGBench v1 four-family API check passes 8/8 with task-specific samples between 443 and 2,724. All training and reaction inference (0.095–0.122 ms via Core ML) run on a single Apple M1 Max — no cloud, no NVIDIA.
 
----
+<p align="center">
+   <b>[ <a href="web/meadow_ami.pdf">Paper</a> | <a href="https://github.com/Hey-Meadow/meadow-wm/tree/main/code">Code</a> | <a href="https://meadow-wm.pages.dev">Website</a> ]</b>
+</p>
 
-## Key results (Meadow v0.0.2)
+<br>
 
-| Task | Causal / Scorer | Success | Precision | Wall-clock |
-|---|---|---|---|---|
-| **TwoRoom** (2D nav) | val_acc 0.9990 | 80/80 (100%) | binary terminal | ~48 s |
-| **PushT** (contact) | 4/4 pose-aware guard | 2/2 (100%) | **0.81 px** sub-pixel | ~56 s + ~112 s distill |
-| **Reacher** (arm) | 4/4; median 0.00369 | 2/2 (100%) | mean 0.00494 | ~minutes |
-| **OGBench Cube** (pick-and-place) | val_acc 0.9963 | 4/4 (100%) | phase-conditioned | ~25 s |
+<p align="center">
+  <img src="assets/meadow_wm.gif" width="80%">
+</p>
 
-**OGBench v1 single-pipeline pass** — same expansion–scorer–reaction code, only spec changes:
-
-| Family | Causal | Reaction | Samples |
-|---|---|---|---|
-| Cube | 8/8 | 8/8 | 894 |
-| PointMaze | 8/8 | 8/8 | 2,724 |
-| Scene | 8/8 | 8/8 | 903 |
-| Puzzle | 8/8 | 8/8 | 443 |
-
-Single device: **Apple M1 Max + MLX** (no cloud, no NVIDIA). Reaction inference: **0.095–0.122 ms** (Core ML).
-
----
-
-## Architecture
-
-Meadow factors robot control into **three explicit layers**:
-
-1. **Physics expansion (Layer 1)** — causal tree of candidate trajectories under simulator dynamics. *Non-learning.* Branches are filtered through physical constraint before any neural component sees them.
-2. **Neural scorer (Layer 2)** — compact network that learns success likelihood over physics-validated branches. The training distribution has already passed physical filtering, so the abstractions formed respect conservation and feasibility without auxiliary losses.
-3. **Reaction policy (Layer 3)** — distillation of the selected chain into a deployable low-latency controller (sub-millisecond inference on Apple Silicon via Core ML).
-
-A **named-variable calibration loop** closes the system: when deployed behavior diverges from the predicted chain, specific physical parameters in the spec are re-estimated and the affected layer is re-distilled locally — no full retraining, no demonstration re-collection.
-
----
-
-## Reproducibility
-
-All numbers reported in the [full report](web/meadow_ami.pdf) come from local artifacts on a single Apple M1 Max workstation. Per-checkpoint scorer convergence is captured in local `metrics.json` files; videos in [`web/`](web/) subdirectories are direct rollouts from the trained checkpoints (not curated highlights).
-
-**Code**: 11 reproducer scripts (Layer 2 scorer training + Layer 3 reaction policy distillation) for all four showcase tasks are in [`code/`](code/). See [`code/README.md`](code/README.md) for setup and quick-start commands.
-
-```bash
-pip install -r code/requirements.txt
-python code/train_pusht_causal_student_v2.py --output runs/pusht_v2     # PushT 0.81 px sub-pixel
-python code/train_ogbench_cube_neural_causal_scorer.py --output runs/cube_scorer
-# ... see code/README.md for all four tasks
-```
-
-External dependency: [`stable-worldmodel`](https://github.com/galilai-group/stable-worldmodel) (Maes / Le Lidec / Balestriero) is used as the shared environment registry — same package as [LeWM](https://github.com/lucas-maes/le-wm).
-
----
-
-## Repository structure
-
-```
-README.md                 # This file
-LICENSE                   # MIT
-code/                     # Reproducer scripts (11 files, 232 KB)
-  README.md               # Setup + quick-start commands
-  requirements.txt        # mlx, mlx-lm, gymnasium, stable-worldmodel, ...
-  meadow_student_backbone.py
-  rtg_translator.py / ik_reacher.py     # Task-specific helpers
-  train_*.py              # Layer 2 scorer + Layer 3 reaction policy training (all 4 tasks)
-web/                      # Cloudflare Pages deployment source
-  index.html              # Full English report
-  index_zh.html           # 完整繁體中文報告
-  meadow_ami.pdf          # Downloadable English PDF (1.5 MB)
-  meadow_ami_zh.pdf       # 中文 PDF (2.1 MB)
-  tworoom_*/              # TwoRoom 2D navigation rollout videos
-  pusht_*/                # PushT contact manipulation rollout videos
-  reacher_*/              # Reacher arm control rollout videos
-  ogbench_cube_*/         # OGBench Cube pick-and-place rollout videos
-```
-
----
-
-## Citation
-
+If you find this work useful, please cite:
 ```bibtex
 @techreport{huang2026meadow,
   title  = {Meadow: A Physics-Grounded Three-Layer Learning Stack for Robot Control},
@@ -96,18 +27,73 @@ web/                      # Cloudflare Pages deployment source
 }
 ```
 
----
+## Using the code
+This codebase builds on [stable-worldmodel](https://github.com/galilai-group/stable-worldmodel) (Maes, Le Lidec, Balestriero) for environment management, registry, and wrappers — the same package used by [LeWM](https://github.com/lucas-maes/le-wm). The 11 task-specific reproducer scripts in [`code/`](code/) implement Layer 2 scorer training and Layer 3 reaction-policy distillation; Layer 1 physics expansion is inline within each task script.
 
-## License
+**Installation:**
+```bash
+pip install -r code/requirements.txt
+```
 
-**MIT** for all source code in [`code/`](code/) — see [`LICENSE`](LICENSE).
-Report and rollout videos in [`web/`](web/): CC BY-NC 4.0 (attribution + non-commercial).
+Apple Silicon (M1/M2/M3/M4) recommended — MLX-first codebase. Tested on M1 Max.
 
----
+## Tasks
 
-## Contact
+Four representative tasks span navigation, contact manipulation, arm control, and pick-and-place:
 
-Sheng-Kai Huang (黃聖凱) · Independent researcher, Taipei
-- Email: akai@fawstudio.com
-- GitHub: [@akaiHuang](https://github.com/akaiHuang)
-- Lab: [@Hey-Meadow](https://github.com/Hey-Meadow) — *Independent research lab. World models grounded in physical state, inspired by* A Path Towards Autonomous Machine Intelligence *(LeCun, 2022).*
+| Task | Causal / Scorer | Success | Precision | Wall-clock |
+|---|---|---|---|---|
+| TwoRoom (2D nav) | val_acc 0.9990 | 80/80 (100%) | binary terminal | ~48 s |
+| PushT (contact) | 4/4 pose-aware guard | 2/2 (100%) | **0.81 px** sub-pixel | ~56 s + ~112 s distill |
+| Reacher (arm) | 4/4; median 0.00369 | 2/2 (100%) | mean 0.00494 | ~minutes |
+| OGBench Cube (pick-and-place) | val_acc 0.9963 | 4/4 (100%) | phase-conditioned | ~25 s |
+
+**OGBench v1 single-pipeline pass** — same expansion–scorer–reaction code, only spec changes:
+
+| Family | Causal | Reaction | Samples |
+|---|---|---|---|
+| Cube | 8/8 | 8/8 | 894 |
+| PointMaze | 8/8 | 8/8 | 2,724 |
+| Scene | 8/8 | 8/8 | 903 |
+| Puzzle | 8/8 | 8/8 | 443 |
+
+Reaction inference: 0.095–0.122 ms on Apple M1 Max via Core ML.
+
+## Training
+
+Per-task training scripts live in [`code/`](code/). Each script is self-documenting via `--help`.
+
+```bash
+# 1. TwoRoom — train scorer (Layer 2) then student (Layer 3)
+python code/train_tworoom_neural_causal_scorer.py --output runs/tworoom_scorer
+python code/train_tworoom_causal_student_v2.py --scorer runs/tworoom_scorer
+
+# 2. PushT — distill kNN-exemplar reaction (achieves 0.81 px sub-pixel)
+python code/train_pusht_causal_student_v2.py --output runs/pusht_v2
+
+# 3. Reacher — train reaction student
+python code/train_reacher_causal_student_v2.py --output runs/reacher_v2
+
+# 4. OGBench Cube — full pipeline
+python code/train_ogbench_cube_neural_causal_scorer.py --output runs/cube_scorer
+python code/train_ogbench_cube_causal_student.py --scorer runs/cube_scorer --output runs/cube_v2
+```
+
+Outputs include `metrics.json` (training curves), `summary.json`, `*.npz` (checkpoints), and `videos/` (rollouts). All wall-clocks are measured on a single Apple M1 Max.
+
+## Evaluation
+
+Each training script supports an evaluation mode that replays the saved checkpoint through heldout episodes — see `--help` on any `train_*.py`. Live demo rollouts (32 successful episodes across the four tasks) are available at the [website](https://meadow-wm.pages.dev) and rendered into the [PDF report](web/meadow_ami.pdf).
+
+## Pretrained Checkpoints
+
+Coming soon — planned upload to Hugging Face. For early access, contact `akai@fawstudio.com`.
+
+## Loading a checkpoint
+
+To be documented once Hugging Face upload is complete. The current snapshot saves checkpoints in `safetensors` format alongside `metrics.json` / `summary.json` in each run output directory.
+
+## Contact & Contributions
+Open [issues](https://github.com/Hey-Meadow/meadow-wm/issues)! For questions or collaborations, please contact `akai@fawstudio.com`.
+
+This work is conducted at [Hey-Meadow Lab](https://github.com/Hey-Meadow), an independent research lab grounded in [LeCun's *A Path Towards Autonomous Machine Intelligence* (2022)](https://openreview.net/pdf?id=BZ5a1r-kVsf).
